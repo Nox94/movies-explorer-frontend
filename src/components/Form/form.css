@@ -1,0 +1,135 @@
+.form {
+    min-width: 260px;
+    width: 100%;
+    max-width: 410px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.form__logo {
+    margin: 0 auto 50px;
+}
+
+.form__heading {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+    text-align: center;
+    margin: 0 0 80px 0;
+}
+
+.form__input-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.form__label {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 10px;
+    line-height: 12px;
+    color: #A0A0A0;
+    margin: 0 0 5px 0;
+}
+
+.form__input {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    border: none;
+    border-bottom: 1px solid #EDEDED;
+    padding: 0 0 10px 0;
+    margin: 0 0 24px 0;
+}
+
+.form__input:last-of-type {
+    margin: 0;
+}
+
+.form__input:focus, .form__input:active {
+    outline: none;
+    border-bottom: 1px solid #A99CF6;
+}
+
+.form__error-message {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 12px;
+    color: #5934EE;
+}
+
+.form__button {
+    width: 100%;
+    height: 45px;
+    background: #A99CF6;
+    border-radius: 3px;
+    border: none;
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    text-align: center;
+    margin: 0 0 16px 0;
+    cursor: pointer;
+}
+
+.form__button:hover {
+    background-color: #897cd7;
+    transition: background-color ease-in-out 0.3s;
+}
+
+.form__button:active {
+    background-color: rgba(169, 156, 246, 0.5);
+}
+
+.form__text {
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 15px;
+    text-align: center;
+    color: #A0A0A0;
+    margin: 0 6px 0 0;
+}
+
+.form__link {
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 15px;
+    text-align: center;
+    color: #A99CF6;
+    text-decoration: none;
+}
+
+.form__wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+   .form {
+       align-items: flex-start;
+   }
+    .form__logo {
+       margin: 0 0 40px 0;
+   }
+    .form__heading {
+        margin: 0 0 40px 0;
+    }
+
+    .form__input-wrapper {
+        margin: 0 0 134px 0;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .form {
+        justify-content: center;
+    }
+}

@@ -1,0 +1,64 @@
+.section {
+    min-width: 320px;
+    width: 100%;
+    max-width: 1280px;
+    /*height: 100vh;*/
+    box-sizing: border-box;
+}
+
+.heading {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    letter-spacing: -0.04em;
+}
+
+.subheading {
+    font-size: 18px;
+    line-height: 22px;
+    letter-spacing: -0.04em;
+    font-weight: 400;
+}
+
+.text {
+    font-size: 11px;
+    line-height: 145%;
+    font-weight: 400;
+    letter-spacing: -0.04em;
+}
+
+.line {
+    background-color: #EDEDED;
+    size: 1px;
+    width: 100%;
+}
+
+.outline {
+    outline: 1px solid #0d67d4;
+}
+
+.link {
+    cursor: pointer;
+}
+
+.link:hover {
+    opacity: 0.5;
+    transition: opacity 0.4s;
+}
+
+.link:visited {
+    color: black;
+}
+
+.hidden {
+    display: none;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: inherit;
+    width: 100%;
+}

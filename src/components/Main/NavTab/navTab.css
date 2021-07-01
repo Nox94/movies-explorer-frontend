@@ -1,0 +1,45 @@
+.navTab {
+    background-color: #F5F5F5;
+    padding: 25px 0;
+    box-sizing: border-box;
+    display: flex;
+}
+
+.navTab__list {
+    padding: 0;
+    display: flex;
+    margin: 0 auto;
+
+}
+.navTab__list-unit {
+    list-style-type: none;
+    margin-right: 24px;
+}
+
+.navTab__list-unit:last-child {
+    margin-right: 0;
+}
+
+.navTab__link {
+    cursor: pointer;
+    font-size: 11px;
+    line-height: 145%;
+    font-weight: 400;
+    color: black;
+}
+
+@media screen and (min-width: 768px) {
+    .navTab {
+        padding: 25px 0;
+        max-height: 66px;
+    }
+
+    .navTab__list-unit {
+        margin: 0 40px 0 0;
+    }
+
+    .navTab__link {
+        font-size: 13px;
+        line-height: 123%;
+    }
+}
