@@ -1,7 +1,7 @@
 const baseUrl =
     process.env.NODE_ENV === 'production'
         ? 'https://nox-movies-explorer.nomoredomains.icu/'
-        : 'http://localhost:3000';
+        : 'http://localhost:3002';
 
 export const register = (name, email, password) => {
     return fetch(`${baseUrl}/signup`, {

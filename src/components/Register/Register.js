@@ -11,14 +11,14 @@ function Register() {
     function handleSubmit({name, email, password}) {
 
         auth.register(name, email, password).then((res) => {
-            if (!res._id) {
-                console.log('Ошибка: при регистрации не пришел _id');
+            if (!res) {
+                throw new Error();
             } else {
                 history.push('/signin');
                 console.log(res);
             }
         }).catch((e) => {
-            console.log(e.message);
+            console.log(e);
         })
     }
 
