@@ -18,9 +18,9 @@ export default function Form(props) {
     function handleSubmit(e) {
         e.preventDefault();
         if (location.pathname === '/signup') {
-            props.onRegisterSubmit(state);
+            props.onRegisterSubmit(state); //передаю значения инпутов
         } else {
-            console.log('here will be login submit');
+            props.onLoginSubmit(state); //передаю значения инпутов
         }
     }
 
@@ -42,8 +42,11 @@ export default function Form(props) {
                                 className="form__input"
                                 type="text"
                                 name={'name'}
-                                value={state.name}
+                                value={state.name || ''}
                                 id="form__name-input"
+                                minLength={2}
+                                maxLength={40}
+                                autoComplete="off"
                                 required
                                 onChange={handleChange}
                             />
@@ -52,7 +55,7 @@ export default function Form(props) {
                         <input
                             className="form__input"
                             name={'email'}
-                            value={state.email}
+                            value={state.email || ''}
                             id="form__email-input"
                             type="email"
                             required
@@ -63,9 +66,12 @@ export default function Form(props) {
                             className="form__input"
                             type="password"
                             id="form__password-input"
+                            minLength={8}
+                            maxLength={60}
+                            autoComplete="off"
                             required
                             name={'password'}
-                            value={state.password}
+                            value={state.password || ''}
                             style={(location.pathname === "/signup") ? {margin: '0 0 6px 0'} : {margin: '0'}}
                             onChange={handleChange}
                         />
