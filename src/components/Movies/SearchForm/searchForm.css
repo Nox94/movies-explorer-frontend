@@ -32,6 +32,11 @@
     color: #A0A0A0;
     padding: 13px 16px;
     box-sizing: border-box;
+    outline: none;
+}
+
+.search__input:active, focus {
+    outline: #A99CF6;
 }
 
 .search__button {
