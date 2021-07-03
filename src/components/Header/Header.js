@@ -3,21 +3,15 @@ import '../../common.css';
 import './header.css';
 import Navigation from "./Navigation/Navigation.js";
 import Logo from "../Logo/Logo.js";
+import {HeaderPlum, HeaderWhite} from "../../utils/Constants.js";
 
-const headerWhite = {
-    background: '#fff',
-}
-
-const headerPlum = {
-    background: '#42346B',
-}
 
 function Header() {
     const location = useLocation();
     return (
         <Route exact path={["/", "/movies", "/saved-movies", "/profile"]}>
             <header className="header"
-                    style={(location.pathname === "/") ? headerPlum : headerWhite}>
+                    style={(location.pathname === "/") ? HeaderPlum : HeaderWhite}>
                 <Link className="link" to="/"><Logo/></Link>
                 <Route exact path="/">
                     <div className="header__link-wrapper">
