@@ -13,7 +13,7 @@ function Login() {
             if (!res) {
                 throw new Error();
             } else {
-                history.push('/');
+                history.push('/movies');
             }
         }).catch((e) => {
             console.log(e);

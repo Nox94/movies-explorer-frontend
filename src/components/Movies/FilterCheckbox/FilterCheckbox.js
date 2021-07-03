@@ -6,7 +6,7 @@ function FilterCheckbox() {
         <>
             <div className="checkbox">
                 <label className="checkbox__container">
-                    <input className="checkbox__input" type="checkbox" checked="true"/>
+                    <input className="checkbox__input" type="checkbox" defaultChecked={true}/>
                     <span className="checkbox__slider round"/>
                 </label>
                 <p className="checkbox__text">
