@@ -13,12 +13,18 @@ export const register = (name, email, password) => {
         body: JSON.stringify({name, email, password}),
     })
         .then((response) => {
-            return response.json();
+            if (response.status === 409) {
+                return Promise.reject(new Error("Пользователь с таким email уже существует."))
+            } else if (response.status === 404) {
+                return Promise.reject(new Error("Введены некорректные данные."))
+            } else {
+                return response.json();
+            }
         })
         .then((res) => {
             return res;
         })
-        .catch((err) => console.log(err.message));
+        .catch((err) => console.log(err));
 };
 
 export const login = (email, password) => {
@@ -31,7 +37,11 @@ export const login = (email, password) => {
         body: JSON.stringify({email, password}),
     })
         .then((response) => {
-            return response.json();
+            if (response.status === 404) {
+                return Promise.reject(new Error("Введены некорректные данные."))
+            } else {
+                return response.json();
+            }
         })
         .then(({token}) => {
             if (token) {
@@ -41,3 +51,6 @@ export const login = (email, password) => {
         })
         .catch((err) => console.log(err));
 };
+
+//{"_id":"60df541fa53d86413021796c",
+// "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGRmNTQxZmE1M2Q4NjQxMzAyMTc5NmMiLCJpYXQiOjE2MjU0OTAwMDksImV4cCI6MTYyNjA5NDgwOX0.e6rGfh6Tcu8DmWJVdyeMH9hmfRuQ6fMLkjydk4Xa8os"}
