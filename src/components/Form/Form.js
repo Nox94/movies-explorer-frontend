@@ -5,7 +5,6 @@ import Logo from "../Logo/Logo.js";
 import {Violet} from "../../utils/Constants.js";
 import {useState} from "react";
 
-
 export default function Form(props) {
     const location = useLocation();
     const [state, setState] = useState({});
@@ -19,8 +18,10 @@ export default function Form(props) {
         e.preventDefault();
         if (location.pathname === '/signup') {
             props.onRegisterSubmit(state); //передаю значения инпутов
+            setState(''); //очищаю стейт
         } else {
             props.onLoginSubmit(state); //передаю значения инпутов
+            setState(''); //очищаю стейт
         }
     }
 
@@ -117,7 +118,6 @@ export default function Form(props) {
                     </div>
                 </div>
             </form>
-
         </>
     )
 }

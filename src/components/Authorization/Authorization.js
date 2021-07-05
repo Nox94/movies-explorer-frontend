@@ -1,7 +1,4 @@
-const baseUrl =
-    process.env.NODE_ENV === 'production'
-        ? 'https://nox-movies-explorer.nomoredomains.icu/'
-        : 'http://localhost:3002';
+import {baseUrl} from "../../utils/Constants.js";
 
 export const register = (name, email, password) => {
     return fetch(`${baseUrl}/signup`, {
@@ -27,7 +24,7 @@ export const register = (name, email, password) => {
         .catch((err) => console.log(err));
 };
 
-export const login = (email, password) => {
+export const authorize = (email, password) => {
     return fetch(`${baseUrl}/signin`, {
         method: "POST",
         headers: {
@@ -47,6 +44,9 @@ export const login = (email, password) => {
             if (token) {
                 localStorage.setItem("token", token);
                 return token;
+            }
+            else {
+                return new Error('Ошибка: нет токена в ответе от сервера.');
             }
         })
         .catch((err) => console.log(err));

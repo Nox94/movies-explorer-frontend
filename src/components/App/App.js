@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import {Route, Switch} from "react-router-dom";
 import Header from "../Header/Header.js";
@@ -10,35 +10,36 @@ import Footer from "../Footer/Footer.js";
 import PageNotFound from "../PageNotFound/PageNotFound.js";
 import Main from "../Main/Main.js";
 import Login from "../Login/Login";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.js";
 
 
 function App() {
+
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    function handleLogin() {
+        setLoggedIn(true);
+    }
 
     return (
         <div className="app">
             <Header/>
             <Switch>
-
                 <Route exact path="/">
                     <Main/>
                 </Route>
 
-                <Route path="/movies">
-                    <Movies/>
-                </Route>
+                <ProtectedRoute path="/movies" component={Movies} loggedIn={loggedIn}/>
 
-                <Route path="/saved-movies">
-                    <SavedMovies/>
-                </Route>
+                <ProtectedRoute path="/saved-movies" component={SavedMovies} loggedIn={loggedIn}/>
 
-                <Route path="/profile">
-                    <Profile/>
-                </Route>
+                <ProtectedRoute path="/profile" component={Profile} loggedIn={loggedIn}/>
 
                 <Route path="/signin">
-                    <Login/>
+                    <Login
+                        onLogin={handleLogin}
+                    />
                 </Route>
-
                 <Route path="/signup">
                     <Register/>
                 </Route>
@@ -47,9 +48,7 @@ function App() {
                     <PageNotFound/>
                 </Route>
             </Switch>
-
             <Footer/>
-
         </div>
     );
 }
