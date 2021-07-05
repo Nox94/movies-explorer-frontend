@@ -32,7 +32,7 @@
     }
 }
 
-@media screen and (min-width: 768px){
+@media screen and (min-width: 768px) {
     .promo {
         padding: 0 19px;
         min-height: 858px;
@@ -46,13 +46,13 @@
     }
 }
 
-@media  screen and (min-width: 768px) and (max-width: 1279px) {
+@media screen and (min-width: 768px) and (max-width: 1279px) {
     .promo__heading {
         max-width: 700px;
     }
 }
 
-@media screen and (min-width: 1280px){
+@media screen and (min-width: 1280px) {
     .promo {
         min-height: 598px;
     }

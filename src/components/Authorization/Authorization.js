@@ -44,11 +44,23 @@ export const authorize = (email, password) => {
             if (token) {
                 localStorage.setItem("token", token);
                 return token;
-            }
-            else {
+            } else {
                 return new Error('Ошибка: нет токена в ответе от сервера.');
             }
         })
+        .catch((err) => console.log(err));
+};
+
+export const getUsersInfo = (token) => {
+    return fetch(`${baseUrl}/users/me`, {
+        method: "GET",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    })
+        .then((res) => res.json())
         .catch((err) => console.log(err));
 };
 
