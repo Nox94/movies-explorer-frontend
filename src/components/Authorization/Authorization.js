@@ -54,6 +54,7 @@ export const authorize = (email, password) => {
 export const getUsersInfo = (token) => {
     return fetch(`${baseUrl}/users/me`, {
         method: "GET",
+        credentials: 'include',
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",

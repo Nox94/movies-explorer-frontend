@@ -1,13 +1,21 @@
 export const HeaderWhite = {
-    background: '#fff',
+    backgroundColor: '#fff'
 }
 
 export const HeaderPlum = {
-    background: '#42346B',
+    backgroundColor: '#42346B'
 }
 
 export const Violet = {
     color: "#5934EE"
+}
+
+export const WhiteColor = {
+    color: "#fff"
+}
+
+export const BlackColor = {
+    color: "#000"
 }
 
 export const baseUrl =

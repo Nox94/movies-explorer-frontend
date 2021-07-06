@@ -12,7 +12,7 @@ import Main from "../Main/Main.js";
 import Login from "../Login/Login";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.js";
 import * as auth from '../Authorization/Authorization.js';
-import {CurrentUserContext} from "../../contexts/CurrentUserContext.js";
+import {CurrentUserContext, LoggedInContext} from "../../contexts/contexts.js";
 
 function App() {
 
@@ -53,36 +53,38 @@ function App() {
     }
 
     return (
-        <div className="app">
+
             <CurrentUserContext.Provider value={currentUser}>
-                <Header/>
-                <Switch>
-                    <Route exact path="/">
-                        <Main/>
-                    </Route>
+                <LoggedInContext.Provider value={{loggedIn}}>
 
-                    <ProtectedRoute path="/movies" component={Movies} loggedIn={loggedIn}/>
+                    <Header />
 
-                    <ProtectedRoute path="/saved-movies" component={SavedMovies} loggedIn={loggedIn}/>
+                    <Switch>
+                        <Route exact path="/">
+                            <Main/>
+                        </Route>
 
-                    <ProtectedRoute path="/profile" component={Profile} loggedIn={loggedIn}/>
+                        <ProtectedRoute path="/movies" component={Movies} />
 
-                    <Route path="/signin">
-                        <Login
-                            onLogin={handleLogin}
-                        />
-                    </Route>
-                    <Route path="/signup">
-                        <Register/>
-                    </Route>
+                        <ProtectedRoute path="/saved-movies" component={SavedMovies} />
 
-                    <Route path="*">
-                        <PageNotFound/>
-                    </Route>
-                </Switch>
-                <Footer/>
+                        <ProtectedRoute path="/profile" component={Profile} />
+
+                        <Route path="/signin">
+                            <Login
+                                onLogin={handleLogin}
+                            />
+                        </Route>
+                        <Route path="/signup">
+                            <Register/>
+                        </Route>
+                        <Route path="*">
+                            <PageNotFound/>
+                        </Route>
+                    </Switch>
+                    <Footer/>
+                </LoggedInContext.Provider>
             </CurrentUserContext.Provider>
-        </div>
     );
 }
 

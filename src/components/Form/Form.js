@@ -26,7 +26,6 @@ export default function Form(props) {
     }
 
     return (
-        <>
             <form className="form" noValidate={true} onSubmit={handleSubmit}>
                 <Link to="/" className="form__logo link"><Logo/></Link>
                 <Route path="/signup">
@@ -118,6 +117,5 @@ export default function Form(props) {
                     </div>
                 </div>
             </form>
-        </>
     )
 }

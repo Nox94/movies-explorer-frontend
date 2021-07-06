@@ -4,7 +4,7 @@ import './profile.css'
 const name = "Евгения";
 const email = "sss@ya.ru"
 
-function Profile() {
+function Profile(props) {
     return (
         <section className="profile">
             <h2 className="profile__heading">Привет, Евгения!</h2>
