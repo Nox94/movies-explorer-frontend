@@ -1,4 +1,3 @@
-import React from 'react';
 import './main.css';
 import Promo from "./Promo/Promo.js";
 import NavTab from "./NavTab/NavTab.js";
@@ -7,7 +6,7 @@ import Techs from "./Techs/Techs.js";
 import AboutMe from "./AboutMe/AboutMe.js";
 import Portfolio from "./Portfolio/Portfolio.js";
 
-function Main() {
+const Main = () => {
     return (
         <>
             <Promo/>
@@ -16,7 +15,6 @@ function Main() {
             <Techs/>
             <AboutMe/>
             <Portfolio/>
-
         </>
     );
 }

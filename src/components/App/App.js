@@ -12,10 +12,10 @@ import Main from "../Main/Main.js";
 import Login from "../Login/Login";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.js";
 import * as auth from '../Authorization/Authorization.js';
+import * as mainApi from '../../utils/MainApi.js';
 import {CurrentUserContext, LoggedInContext} from "../../contexts/contexts.js";
 
 function App() {
-
     const [loggedIn, setLoggedIn] = useState(false);
     const [currentUser, setCurrentUser] = useState({});
     const history = useHistory();
@@ -39,11 +39,9 @@ function App() {
 
     function handleTokenCheck() {
         const token = localStorage.getItem("token");
-        // console.log(token);
         if (token) {
             auth.getUsersInfo(token).then((res) => {
-                // console.log(res); //объект пользователя
-                if (res) {
+                if (res) {//объект пользователя
                     setLoggedIn(true);
                     setCurrentUser(res);
                     history.push("/movies");
@@ -52,39 +50,28 @@ function App() {
         }
     }
 
+    function handleUserDataChanging(name, email) {
+        mainApi.changeUserInfo(name, email)
+            .then((res) => setCurrentUser(res))
+            .catch((err) => console.log(err))
+    }
+
     return (
-
-            <CurrentUserContext.Provider value={currentUser}>
-                <LoggedInContext.Provider value={{loggedIn}}>
-
-                    <Header />
-
-                    <Switch>
-                        <Route exact path="/">
-                            <Main/>
-                        </Route>
-
-                        <ProtectedRoute path="/movies" component={Movies} />
-
-                        <ProtectedRoute path="/saved-movies" component={SavedMovies} />
-
-                        <ProtectedRoute path="/profile" component={Profile} />
-
-                        <Route path="/signin">
-                            <Login
-                                onLogin={handleLogin}
-                            />
-                        </Route>
-                        <Route path="/signup">
-                            <Register/>
-                        </Route>
-                        <Route path="*">
-                            <PageNotFound/>
-                        </Route>
-                    </Switch>
-                    <Footer/>
-                </LoggedInContext.Provider>
-            </CurrentUserContext.Provider>
+        <CurrentUserContext.Provider value={currentUser}>
+            <LoggedInContext.Provider value={{loggedIn}}>
+                <Header/>
+                <Switch>
+                    <Route exact path="/" component={Main}/>
+                    <ProtectedRoute path="/movies" component={Movies}/>
+                    <ProtectedRoute path="/saved-movies" component={SavedMovies}/>
+                    <ProtectedRoute path="/profile" component={Profile} onDataChange={handleUserDataChanging}/>
+                    <Route path="/signin" component={Login} onLogin={handleLogin}/>
+                    <Route path="/signup" component={Register}/>
+                    <Route path="*" component={PageNotFound}/>
+                </Switch>
+                <Footer/>
+            </LoggedInContext.Provider>
+        </CurrentUserContext.Provider>
     );
 }
 

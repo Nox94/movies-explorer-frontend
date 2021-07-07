@@ -3,7 +3,7 @@ import '../../../common.css';
 import {Link, useLocation} from "react-router-dom";
 import React from "react";
 import icon from '../../../images/icon_account.svg';
-import iconWhite from '../../../images/icon_account_white.svg';
+import iconWhite from '../../../images/icon_accountwhite.svg';
 import useWindowSize from "../../../hooks/useWindowSize.js";
 import {BlackColor, WhiteColor} from "../../../utils/Constants.js";
 
@@ -18,7 +18,7 @@ function Navigation() {
     }
 
     return <section className="navigation">
-        {width <= 1000 && <>
+        {width <= 1000 && <div>
             <button className="navigation__burger" onClick={handleMenuClick}/>
             <div className={`${isNavMenuOpen && "navigation__cover"}`}/>
             <div className={`navigation__popup ${isNavMenuOpen && "navigation__popup_visible"}`}>
@@ -55,7 +55,7 @@ function Navigation() {
                     </Link>
                 </div>
             </div>
-        </>}
+        </div>}
         {width >= 1000 && <div className="navigation__wrapper">
             <ul className="navigation__links">
                 <li className="navigation__list-item">
@@ -70,7 +70,7 @@ function Navigation() {
             <Link to="/profile" className="link navigation__account-link"
                   style={(location.pathname === "/") ? WhiteColor : BlackColor} tabIndex="-1">
                 <img className="navigation__icon-account"
-                     src={(location.pathname = "/") ? iconWhite : icon}
+                     src={(location.pathname === "/") ? iconWhite : icon}
                      alt="Иконка кнопки аккаунта."/>
                 Аккаунт
             </Link>

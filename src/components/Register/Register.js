@@ -24,9 +24,7 @@ function Register() {
 
     return (
         <section className="register section">
-            <Form
-                onRegisterSubmit={handleSubmit}
-            />
+            <Form onRegisterSubmit={handleSubmit}/>
         </section>
     )
 }

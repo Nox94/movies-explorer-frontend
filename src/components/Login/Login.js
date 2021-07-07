@@ -23,13 +23,9 @@ function Login(props) {
 
     return (
         <section className="login section">
-            <Form
-                onLoginSubmit={handleSubmit}
-            />
+            <Form onLoginSubmit={handleSubmit}/>
         </section>
     )
 }
 
 export default Login;
-
-// name: "qqq", email: "qqq@ya.ru"
