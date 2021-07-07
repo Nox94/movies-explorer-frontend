@@ -2,6 +2,7 @@ import '../../common.css';
 import './profile.css'
 import {useContext, useEffect, useState} from "react";
 import {CurrentUserContext} from "../../contexts/contexts.js";
+import {Link} from "react-router-dom";
 
 
 function Profile(props) {
@@ -9,6 +10,7 @@ function Profile(props) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const user = useContext(CurrentUserContext);
+    const handleLogout = props.onLogout;
 
     function handleChange(e) {
         const target = e.target;
@@ -65,7 +67,7 @@ function Profile(props) {
                 </div>
             </form>
 
-            <a className="profile__link link" href="#">Выйти из аккаунта</a>
+            <Link to="/signin" className="profile__link link" onClick={handleLogout}>Выйти из аккаунта</Link>
         </section>
     )
 }

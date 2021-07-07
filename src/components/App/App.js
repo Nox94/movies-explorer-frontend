@@ -68,6 +68,12 @@ function App() {
             .catch((err) => console.log(err))
     }
 
+    function handleLogout() {
+        localStorage.removeItem("token");
+        setCurrentUser({});
+        setLoggedIn(false);
+    }
+
     return (
         <CurrentUserContext.Provider value={currentUser}>
             <LoggedInContext.Provider value={{loggedIn}}>
@@ -76,7 +82,8 @@ function App() {
                     <Route exact path="/" component={Main}/>
                     <ProtectedRoute path="/movies" component={Movies}/>
                     <ProtectedRoute path="/saved-movies" component={SavedMovies}/>
-                    <ProtectedRoute path="/profile" component={Profile} onDataChange={handleUserDataChange}/>
+                    <ProtectedRoute path="/profile" component={Profile} onDataChange={handleUserDataChange}
+                                    onLogout={handleLogout}/>
                     <Route path="/signin" render={() => <Login onLogin={handleLoginSubmit}/>}/>
                     <Route path="/signup" render={() => <Register onRegister={handleRegisterSubmit}/>}/>
                     <Route path="*" component={PageNotFound}/>
