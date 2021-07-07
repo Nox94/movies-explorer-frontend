@@ -11,7 +11,6 @@ import PageNotFound from "../PageNotFound/PageNotFound.js";
 import Main from "../Main/Main.js";
 import Login from "../Login/Login";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.js";
-import * as auth from '../Authorization/Authorization.js';
 import * as mainApi from '../../utils/MainApi.js';
 import {CurrentUserContext, LoggedInContext} from "../../contexts/contexts.js";
 
@@ -33,24 +32,37 @@ function App() {
         // }
     }, [loggedIn]);
 
-    function handleLogin() {
-        setLoggedIn(true);
+    function handleRegisterSubmit({name, email, password}) {
+        mainApi.register(name, email, password).then((res) => {
+            if (res) {
+                history.push('/signin')
+            }
+        }).catch((e) => console.log(e));
+    }
+
+    function handleLoginSubmit({email, password}) {
+        mainApi.authorize(email, password).then((res) => {
+            if (res) { //токен
+                setLoggedIn(true);
+                history.push('/movies');
+            }
+        }).catch((e) => console.log(e));
     }
 
     function handleTokenCheck() {
         const token = localStorage.getItem("token");
         if (token) {
-            auth.getUsersInfo(token).then((res) => {
-                if (res) {//объект пользователя
+            mainApi.getUsersInfo(token).then((res) => {
+                if (res) { //объект пользователя
                     setLoggedIn(true);
                     setCurrentUser(res);
                     history.push("/movies");
                 }
-            });
+            }).catch((e) => console.log(e));
         }
     }
 
-    function handleUserDataChanging(name, email) {
+    function handleUserDataChange(name, email) {
         mainApi.changeUserInfo(name, email)
             .then((res) => setCurrentUser(res))
             .catch((err) => console.log(err))
@@ -64,9 +76,9 @@ function App() {
                     <Route exact path="/" component={Main}/>
                     <ProtectedRoute path="/movies" component={Movies}/>
                     <ProtectedRoute path="/saved-movies" component={SavedMovies}/>
-                    <ProtectedRoute path="/profile" component={Profile} onDataChange={handleUserDataChanging}/>
-                    <Route path="/signin" component={Login} onLogin={handleLogin}/>
-                    <Route path="/signup" component={Register}/>
+                    <ProtectedRoute path="/profile" component={Profile} onDataChange={handleUserDataChange}/>
+                    <Route path="/signin" render={() => <Login onLogin={handleLoginSubmit}/>}/>
+                    <Route path="/signup" render={() => <Register onRegister={handleRegisterSubmit}/>}/>
                     <Route path="*" component={PageNotFound}/>
                 </Switch>
                 <Footer/>
