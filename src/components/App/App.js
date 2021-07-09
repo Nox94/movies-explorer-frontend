@@ -12,11 +12,13 @@ import Main from "../Main/Main.js";
 import Login from "../Login/Login";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.js";
 import * as mainApi from '../../utils/MainApi.js';
+import * as moviesApi from '../../utils/MoviesApi.js';
 import {CurrentUserContext, LoggedInContext} from "../../contexts/contexts.js";
 
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
     const [currentUser, setCurrentUser] = useState({});
+    const [moviesCards, setMoviesCards] = useState([]);
     const history = useHistory();
 
     useEffect(() => {
@@ -74,13 +76,21 @@ function App() {
         setLoggedIn(false);
     }
 
+    function handleMoviesSearch(data) {
+        moviesApi.getMoviesOnSearch(data).then((movieCard) => {
+            // setMoviesCards([movieCard, ...moviesCards]);
+            setMoviesCards([...movieCard]);
+            // spread для расширения текущего массива
+        }).catch((err) => console.log(err))
+    }
+
     return (
         <CurrentUserContext.Provider value={currentUser}>
             <LoggedInContext.Provider value={{loggedIn}}>
                 <Header/>
                 <Switch>
                     <Route exact path="/" component={Main}/>
-                    <ProtectedRoute path="/movies" component={Movies}/>
+                    <ProtectedRoute path="/movies" component={Movies} onSearch={handleMoviesSearch} moviesCards={moviesCards}/>
                     <ProtectedRoute path="/saved-movies" component={SavedMovies}/>
                     <ProtectedRoute path="/profile" component={Profile} onDataChange={handleUserDataChange}
                                     onLogout={handleLogout}/>

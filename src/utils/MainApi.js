@@ -1,12 +1,12 @@
-import {baseUrl, handleOriginalResponse, headers, token} from "./Constants.js";
+import {BaseUrl, HandleOriginalResponse, Headers, Token} from "./Constants.js";
 
 export const register = (name, email, password) => {
-    return fetch(`${baseUrl}/signup`, {
+    return fetch(`${BaseUrl}/signup`, {
         method: "POST",
-        headers: headers,
+        headers: Headers,
         body: JSON.stringify({name, email, password}),
     })
-        .then(handleOriginalResponse)
+        .then(HandleOriginalResponse)
         .then((res) => {
             return res;
         })
@@ -14,12 +14,12 @@ export const register = (name, email, password) => {
 };
 
 export const authorize = (email, password) => {
-    return fetch(`${baseUrl}/signin`, {
+    return fetch(`${BaseUrl}/signin`, {
         method: "POST",
-        headers: headers,
+        headers: Headers,
         body: JSON.stringify({email, password}),
     })
-        .then(handleOriginalResponse)
+        .then(HandleOriginalResponse)
         .then(({token}) => {
             if (token) {
                 localStorage.setItem("token", token);
@@ -30,21 +30,21 @@ export const authorize = (email, password) => {
 };
 
 export const getUsersInfo = (token) => {
-    return fetch(`${baseUrl}/users/me`, {
+    return fetch(`${BaseUrl}/users/me`, {
         method: "GET",
-        headers: {...headers, Authorization: `Bearer ${token}`},
+        headers: {...Headers, Authorization: `Bearer ${token}`},
     })
-        .then(handleOriginalResponse)
+        .then(HandleOriginalResponse)
         .catch((err) => console.log(err));
 };
 
 export const changeUserInfo = (name, email) => {
-    return fetch(`${baseUrl}/users/me`, {
+    return fetch(`${BaseUrl}/users/me`, {
         method: "PATCH",
-        headers: {...headers, Authorization: `Bearer ${token}`},
+        headers: {...Headers, Authorization: `Bearer ${Token}`},
         body: JSON.stringify({
             name: name,
             email: email,
         }),
-    }).then(handleOriginalResponse).catch((err) => console.log(err));
+    }).then(HandleOriginalResponse).catch((err) => console.log(err));
 }

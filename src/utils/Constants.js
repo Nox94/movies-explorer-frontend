@@ -11,26 +11,32 @@ export const Violet = {
 }
 
 export const WhiteColor = {
-    color: "#fff"
+    color: "#fff",
+    border: "none"
 }
 
 export const BlackColor = {
-    color: "#000"
+    color: "#000",
+    border: "none"
 }
 
-export const baseUrl =
+export const GrayColor = "#EDEDED";
+
+export const BeatFilmUrl = "https://api.nomoreparties.co/beatfilm-movies";
+
+export const BaseUrl =
     process.env.NODE_ENV === 'production'
         ? 'https://nox-movies-explorer.nomoredomains.icu/'
         : 'http://localhost:3002';
 
-export const headers = {
+export const Headers = {
     Accept: "application/json",
     "Content-Type": "application/json",
 };
 
-export const token = localStorage.getItem("token");
+export const Token = localStorage.getItem("token");
 
-export const handleOriginalResponse = (res) => {
+export const HandleOriginalResponse = (res) => {
     if (!res.ok) {
         return Promise.reject(`Error: ${res.status}`);
     }

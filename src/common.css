@@ -50,6 +50,14 @@
     color: black;
 }
 
+.visibility_hidden {
+    visibility: hidden;
+}
+
+.visibility_visible {
+    visibility: visible;
+}
+
 .hidden {
     display: none;
 }

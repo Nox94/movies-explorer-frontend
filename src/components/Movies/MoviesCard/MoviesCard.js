@@ -1,45 +1,34 @@
-import picture from "../../../images/movie_pic.png";
 import '../../../common.css';
 import './moviesCard.css';
 import {useLocation} from "react-router-dom";
+import {useContext} from "react";
+import {CurrentUserContext} from "../../../contexts/contexts.js";
 
-function MoviesCard() {
+function MoviesCard(props) {
+    const {movie, idKey, nameRU, imageLink, trailerLink, duration, owner} = props;
     const location = useLocation();
+    const user = useContext(CurrentUserContext);
+    const isOwner = owner === user._id;
+    const btnClassName = `${isOwner ? "card__remove-button" : "hidden"}`;
+    const time = duration;
+    const hours = Math.floor(time / 60) + "ч";
+    const minutes = time % 60 + "м";
+//{hours} {minutes}
     return (
         <>
-            <li className="card">
-                <img src={picture} alt="Миниатюра постера фильма." className="card__image"/>
+            <li className="card" key={idKey}>
+                <img src={imageLink} alt="Миниатюра постера фильма." className="card__image"/>
                 <div className="card__wrapper">
-                    <p className="card__capture">33 слова о дизайне</p>
-                    <span className="card__timing">1ч 17м</span>
+                    <p className="card__capture">{nameRU}</p>
+                    {time > 60
+                        ? <span className="card__timing">{hours} {minutes}</span>
+                        : (time === 60)
+                            ? <span className="card__timing">1ч</span>
+                            : <span className="card__timing">{minutes}</span>
+                    }
                 </div>
                 <button
-                    className={(location.pathname === "/movies") ? "card__save-button" : "card__remove-button"}>{(location.pathname === "/movies") ? "Сохранить" : ""}</button>
-            </li>
-            <li className="card">
-                <img src={picture} alt="Миниатюра постера фильма." className="card__image"/>
-                <div className="card__wrapper">
-                    <p className="card__capture">33 слова о дизайне</p>
-                    <span className="card__timing">1ч 17м</span>
-                </div>
-                <button className={(location.pathname === "/movies") ? "card__saved-icon" : "card__remove-button"}/>
-            </li>
-            <li className="card">
-                <img src={picture} alt="Миниатюра постера фильма." className="card__image"/>
-                <div className="card__wrapper">
-                    <p className="card__capture">33 слова о дизайне</p>
-                    <span className="card__timing">1ч 17м</span>
-                </div>
-                <button
-                    className={(location.pathname === "/movies") ? "card__save-button" : "card__remove-button"}>{(location.pathname === "/movies") ? "Сохранить" : ""}</button>
-            </li>
-            <li className="card">
-                <img src={picture} alt="Миниатюра постера фильма." className="card__image"/>
-                <div className="card__wrapper">
-                    <p className="card__capture">33 слова о дизайне</p>
-                    <span className="card__timing">1ч 17м</span>
-                </div>
-                <button className={(location.pathname === "/movies") ? "card__saved-icon" : "card__remove-button"}/>
+                    className={btnClassName}>{(location.pathname === "/movies") ? "Сохранить" : ""}</button>
             </li>
         </>
     )
