@@ -13,7 +13,7 @@ function MoviesCard(props) {
     const time = duration;
     const hours = Math.floor(time / 60) + "ч";
     const minutes = time % 60 + "м";
-//{hours} {minutes}
+
     return (
         <>
             <li className="card" key={idKey}>

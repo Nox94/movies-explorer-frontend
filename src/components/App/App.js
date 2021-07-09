@@ -19,6 +19,7 @@ function App() {
     const [loggedIn, setLoggedIn] = useState(false);
     const [currentUser, setCurrentUser] = useState({});
     const [moviesCards, setMoviesCards] = useState([]);
+    const [moviesSavedCards, setMoviesSavedCards] = useState([]);
     const history = useHistory();
 
     useEffect(() => {
@@ -78,9 +79,13 @@ function App() {
 
     function handleMoviesSearch(data) {
         moviesApi.getMoviesOnSearch(data).then((movieCard) => {
-            // setMoviesCards([movieCard, ...moviesCards]);
             setMoviesCards([...movieCard]);
-            // spread для расширения текущего массива
+        }).catch((err) => console.log(err))
+    }
+
+    function handleMovieSaving(movie) {
+        mainApi.saveMovie(movie).then((movieCard) => {
+            setMoviesSavedCards([...movieCard]);
         }).catch((err) => console.log(err))
     }
 

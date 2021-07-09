@@ -48,3 +48,23 @@ export const changeUserInfo = (name, email) => {
         }),
     }).then(HandleOriginalResponse).catch((err) => console.log(err));
 }
+
+export const saveMovie = (movie) => {
+    return fetch(`${BaseUrl}/movies/`, {
+        method: "POST",
+        headers: {...Headers, Authorization: `Bearer ${Token}`},
+        body: JSON.stringify({
+            country: movie.country,
+            director: movie.director,
+            duration: movie.duration,
+            year: movie.year,
+            description: movie.description,
+            image: movie.image,
+            trailer: movie.trailer,
+            nameRU: movie.nameRU,
+            nameEN: movie.nameEN,
+            thumbnail: movie.thumbnail,
+            movieId: movie.movieId,
+        })
+    }).then(HandleOriginalResponse).catch((err) => console.log(err));
+}

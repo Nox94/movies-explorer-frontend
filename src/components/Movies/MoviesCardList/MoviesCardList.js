@@ -24,7 +24,7 @@ function MoviesCardList(props) {
                 ))}
             </ul>
             <Route path="/movies">
-                <button className="movies__more-button">Еще</button>
+                <button className="movies__more-button hidden">Еще</button>
             </Route>
         </section>
     )
