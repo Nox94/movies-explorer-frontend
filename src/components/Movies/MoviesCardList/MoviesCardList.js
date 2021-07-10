@@ -1,10 +1,9 @@
 import '../../../common.css';
 import './moviesCardList.css';
 import MoviesCard from "../MoviesCard/MoviesCard";
-import {Route} from "react-router-dom";
 
 function MoviesCardList(props) {
-    console.log(props);
+    // console.log(props);
     return (
         <section className="movies__container">
             <ul className="movies__card-list">
@@ -23,9 +22,6 @@ function MoviesCardList(props) {
                     />
                 ))}
             </ul>
-            <Route path="/movies">
-                <button className="movies__more-button hidden">Еще</button>
-            </Route>
         </section>
     )
 }
