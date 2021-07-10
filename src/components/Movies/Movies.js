@@ -10,16 +10,19 @@ function Movies(props) {
     const handleSearch = props.onSearch;
     const [plusCards, setPlusCards] = useState(3);
     const {width} = useWindowSize();
-
     const showMoreMovies = () => {
         (width >= 1000) && setPlusCards((prevValue) => prevValue + 3);
         (width <= 999) && setPlusCards((prevValue) => prevValue + 2);
     }
     return (
         <>
-            <SearchForm onSubmit={handleSearch}/>
+            <SearchForm onSubmit={handleSearch} onChange={props.onChangeInput}/>
             <MoviesCardList moviesCards={moviesCards.slice(0, plusCards)}/>
-            <button className={plusCards >= moviesCards.length ? "hidden" : "movies__more-button"} type="button" onClick={showMoreMovies}>Еще</button>
+            <button className={plusCards >= moviesCards.length ? "hidden" : "movies__more-button"}
+                    type="button"
+                    onClick={showMoreMovies}>
+                Еще
+            </button>
         </>
     );
 }

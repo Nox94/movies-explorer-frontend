@@ -8,6 +8,7 @@ import {GrayColor} from "../../../utils/Constants.js";
 export default function SearchForm(props) {
     const onSubmit = props.onSubmit;
 
+
     function handleSubmit(e) {
         e.preventDefault();
         onSubmit();
@@ -16,7 +17,12 @@ export default function SearchForm(props) {
     return (
         <section className="search">
             <form className="search__form" onSubmit={handleSubmit}>
-                <input className="search__input" placeholder="Фильм"/>
+                <input className="search__input"
+                       placeholder="Фильм"
+                       name="search"
+                       required
+                       type="text"
+                       onChange={props.onChange}/>
                 <button className="search__button" type="submit">Найти</button>
             </form>
             <FilterCheckbox/>

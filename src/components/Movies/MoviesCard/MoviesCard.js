@@ -1,23 +1,24 @@
 import '../../../common.css';
 import './moviesCard.css';
 import {useLocation} from "react-router-dom";
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import {CurrentUserContext} from "../../../contexts/contexts.js";
+import * as mainApi from "../../../utils/MainApi.js";
 
 function MoviesCard(props) {
-    const {movie, idKey, nameRU, imageLink, trailerLink, duration, owner} = props;
+    const {movie, movieId, nameRU, image, trailer, duration, country, director} = props;
     const location = useLocation();
     const user = useContext(CurrentUserContext);
-    const isOwner = owner === user._id;
-    const btnClassName = `${isOwner ? "card__remove-button" : "hidden"}`;
+   /* const isOwner = owner === user._id;
+    const btnClassName = `${isOwner ? "card__remove-button" : "card__save-button"}`;*/
     const time = duration;
     const hours = Math.floor(time / 60) + "ч";
     const minutes = time % 60 + "м";
 
     return (
         <>
-            <li className="card" key={idKey}>
-                <img src={imageLink} alt="Миниатюра постера фильма." className="card__image"/>
+            <li className="card" key={movieId}>
+                <img src={image} alt="Миниатюра постера фильма." className="card__image"/>
                 <div className="card__wrapper">
                     <p className="card__capture">{nameRU}</p>
                     {time > 60
@@ -28,7 +29,12 @@ function MoviesCard(props) {
                     }
                 </div>
                 <button
-                    className={btnClassName}>{(location.pathname === "/movies") ? "Сохранить" : ""}</button>
+                    className="card__save-button"
+                    type="button"
+                    // onClick={handleMovieSaving}
+                >
+                    {(location.pathname === "/movies") ? "Сохранить" : ""}
+                </button>
             </li>
         </>
     )

@@ -3,7 +3,6 @@ import './moviesCardList.css';
 import MoviesCard from "../MoviesCard/MoviesCard";
 
 function MoviesCardList(props) {
-    // console.log(props);
     return (
         <section className="movies__container">
             <ul className="movies__card-list">
@@ -11,14 +10,17 @@ function MoviesCardList(props) {
                     <MoviesCard
                         movie={item}
                         key={item.id}
-                        idKey={item.id}
+                        movieId={item.id}
                         nameRU={item.nameRU}
-                        imageLink={"https://api.nomoreparties.co"+item.image.url}
-                        trailerLink={item.trailerLink}
+                        nameEN={item.nameEN}
+                        image={"https://api.nomoreparties.co"+item.image.url}
+                        thumbnail={"https://api.nomoreparties.co"+item.image.url}
+                        trailer={item.trailerLink}
                         duration={item.duration}
-                        owner={item.owner}
-                        // onMovieSave={}
-                        // onMovieRemoveFromSaved={}
+                        country={item.country}
+                        director={item.director}
+                        year={item.year}
+                        description={item.description}
                     />
                 ))}
             </ul>
