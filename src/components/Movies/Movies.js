@@ -17,7 +17,11 @@ function Movies(props) {
     return (
         <>
             <SearchForm onSubmit={handleSearch} onChange={props.onChangeInput}/>
-            <MoviesCardList moviesCards={moviesCards.slice(0, plusCards)}/>
+            <MoviesCardList
+                moviesCards={moviesCards.slice(0, plusCards)}
+                onSave={props.onSaveCard}
+                moviesSavedCards={props.moviesSavedCards}
+            />
             <button className={plusCards >= moviesCards.length ? "hidden" : "movies__more-button"}
                     type="button"
                     onClick={showMoreMovies}>

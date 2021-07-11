@@ -8,7 +8,6 @@ import {GrayColor} from "../../../utils/Constants.js";
 export default function SearchForm(props) {
     const onSubmit = props.onSubmit;
 
-
     function handleSubmit(e) {
         e.preventDefault();
         onSubmit();

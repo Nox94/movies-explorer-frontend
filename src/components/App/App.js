@@ -42,15 +42,20 @@ function App() {
         }).catch((err) => console.log(err));
     }, [])
 
-     // рендер фильтрованных фильмов
-     useEffect(() => {
-         const filteredMovies = JSON.parse(localStorage.getItem('filteredMovies'));
-         if (filteredMovies) {
-             setFoundMovies(filteredMovies);
-         } else {
-             setFoundMovies([]);
-         }
-     }, []);
+    // рендер фильтрованных фильмов
+    useEffect(() => {
+        const filteredMovies = JSON.parse(localStorage.getItem('filteredMovies'));
+        if (filteredMovies) {
+            setFoundMovies(filteredMovies);
+        } else {
+            setFoundMovies([]);
+        }
+    }, []);
+
+    // рендер сохраненных фильмов из локального хранилища
+    useEffect(() => {
+        getSavedMovies();
+    }, []);
 
     // поиск фильмов
     function handleMoviesSearch() {
@@ -68,10 +73,40 @@ function App() {
         }, 1000)
     }
 
-
+    // сохранение фильмов
     function handleMovieSaving(movie) {
-        mainApi.saveMovie(movie).then((movieCard) => {
-            setMoviesSavedCards([...movieCard]);
+        console.log('app js handle saving',movie);
+        mainApi.saveMovie(movie).then((item) => {
+            //сохрани
+            console.log(item)
+            // const clicked = moviesSavedCards.some((i) => i.movieId === movie.id);
+            // if (!clicked) {
+            //     mainApi.saveMovie({
+            //         country: movie.country,
+            //         director: movie.director,
+            //         duration: movie.duration,
+            //         year: movie.year,
+            //         description: movie.description,
+            //         image: "https://api.nomoreparties.co" + movie.image.url,
+            //         trailer: movie.trailerLink,
+            //         nameRU: movie.nameRU,
+            //         nameEN: movie.nameEN,
+            //         thumbnail: "https://api.nomoreparties.co" + movie.image.url,
+            //         movieId: movie.id,
+            //     }).then(() => {
+            //         getSavedMovies()
+            //     })
+            // }
+            setMoviesSavedCards([...item]);
+        }).catch((err) => console.log(err))
+    }
+
+    function getSavedMovies() {
+        mainApi.getUsersSavedMovies().then((res) => {
+            console.log(res);
+            localStorage.setItem("savedMovies", JSON.stringify(res));
+            const savedMovies = JSON.parse(localStorage.getItem("savedMovies"));
+            setMoviesSavedCards(savedMovies);
         }).catch((err) => console.log(err))
     }
 
@@ -80,7 +115,7 @@ function App() {
         const target = e.target;
         const name = target.name;
         const value = target.value;
-        setInputValue({ ...inputValue, [name]: value });
+        setInputValue({...inputValue, [name]: value});
         // setErrors({ ...errors, [name]: target.validationMessage });
         // setIsValid(target.closest('form').checkValidity());
     };
@@ -117,6 +152,7 @@ function App() {
             }).catch((e) => console.log(e));
         }
     }
+
     // смена данных п-ля
     function handleUserDataChange(name, email) {
         mainApi.changeUserInfo(name, email)
@@ -131,8 +167,6 @@ function App() {
         setLoggedIn(false);
     }
 
-
-
     return (
         <CurrentUserContext.Provider value={currentUser}>
             <LoggedInContext.Provider value={{loggedIn}}>
@@ -144,10 +178,20 @@ function App() {
                                     onSearch={handleMoviesSearch}
                                     moviesCards={foundMovies}
                                     onChangeInput={handleChangeInputValue}
+                                    onSaveCard={handleMovieSaving}
+                                    moviesSavedCards={moviesSavedCards}
                     />
-                    <ProtectedRoute path="/saved-movies" component={SavedMovies}/>
-                    <ProtectedRoute path="/profile" component={Profile} onDataChange={handleUserDataChange}
-                                    onLogout={handleLogout}/>
+                    <ProtectedRoute
+                        path="/saved-movies"
+                        component={SavedMovies}
+                        moviesSavedCards={moviesSavedCards}
+                    />
+                    <ProtectedRoute
+                        path="/profile"
+                        component={Profile}
+                        onDataChange={handleUserDataChange}
+                        onLogout={handleLogout}
+                    />
                     <Route path="/signin" render={() => <Login onLogin={handleLoginSubmit}/>}/>
                     <Route path="/signup" render={() => <Register onRegister={handleRegisterSubmit}/>}/>
                     <Route path="*" component={PageNotFound}/>

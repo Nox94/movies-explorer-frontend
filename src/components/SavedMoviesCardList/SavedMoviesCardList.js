@@ -1,13 +1,15 @@
-import '../../../common.css';
-import './moviesCardList.css';
-import MoviesCard from "../MoviesCard/MoviesCard";
+import '../../common.css';
+import MoviesCard from "../Movies/MoviesCard/MoviesCard.js";
 
-function MoviesCardList(props) {
-    const movies = props.moviesCards;
+
+function SavedMoviesCardList(props) {
+    const savedMovies = props.savedMovies;
+    // console.log(savedMovies); // приходят все сохраненные карточки
+
     return (
         <section className="movies__container">
             <ul className="movies__card-list">
-                {movies.map((item) => (
+                {savedMovies.map((item) => (
                     <MoviesCard
                         movie={item}
                         key={item.id}
@@ -22,10 +24,6 @@ function MoviesCardList(props) {
                         director={item.director}
                         year={item.year}
                         description={item.description}
-                        onSave={props.onSave}
-                        clicked={props.moviesSavedCards.some((i) =>
-                        i.movieId === item.id
-                        )}
                     />
                 ))}
             </ul>
@@ -33,4 +31,4 @@ function MoviesCardList(props) {
     )
 }
 
-export default MoviesCardList;
+export default SavedMoviesCardList;
