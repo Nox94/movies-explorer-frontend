@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import {Route, Switch, useHistory} from "react-router-dom";
+import {Route, Switch, useHistory, useLocation} from "react-router-dom";
 import Header from "../Header/Header.js";
 import Movies from "../Movies/Movies.js";
 import SavedMovies from "../SavedMovies/SavedMovies.js"
@@ -22,11 +22,12 @@ function App() {
     const [foundMovies, setFoundMovies] = useState([]); // найденные фильмы
     const [moviesSavedCards, setMoviesSavedCards] = useState([]); // сохраненные фильмы
     const [inputValue, setInputValue] = useState({});
-
+    const location = useLocation();
     const history = useHistory();
 
     useEffect(() => {
         handleTokenCheck();
+        history.push(location);
     }, [loggedIn]);
 
 
@@ -36,6 +37,7 @@ function App() {
     // при перезагрузке страницы данные остаются на месте
     useEffect(() => {
         moviesApi.getMovies().then((data) => {
+            localStorage.setItem('beat-movies', JSON.stringify(data))
             localStorage.setItem("searchedMovies", JSON.stringify(data));
             const storageMovies = JSON.parse(localStorage.getItem("searchedMovies"));
             setLocalMoviesCards([...storageMovies]);
@@ -100,7 +102,7 @@ function App() {
                 //     })
                 // }
                 setMoviesSavedCards([...item]);
-            }).catch((err) => console.log(err));
+            }).then(() => getSavedMovies()).catch((err) => console.log(err));
         } else {
             moviesSavedCards.some((i) =>
                 i.movieId === movie.id
@@ -177,7 +179,7 @@ function App() {
                 if (res) { //объект пользователя
                     setLoggedIn(true);
                     setCurrentUser(res);
-                    history.push("/movies");
+                    // history.push("/movies");
                 }
             }).catch((e) => console.log(e));
         }
