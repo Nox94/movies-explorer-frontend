@@ -75,30 +75,60 @@ function App() {
 
     // сохранение фильмов
     function handleMovieSaving(movie) {
-        console.log('app js handle saving',movie);
-        mainApi.saveMovie(movie).then((item) => {
-            //сохрани
-            console.log(item)
-            // const clicked = moviesSavedCards.some((i) => i.movieId === movie.id);
-            // if (!clicked) {
-            //     mainApi.saveMovie({
-            //         country: movie.country,
-            //         director: movie.director,
-            //         duration: movie.duration,
-            //         year: movie.year,
-            //         description: movie.description,
-            //         image: "https://api.nomoreparties.co" + movie.image.url,
-            //         trailer: movie.trailerLink,
-            //         nameRU: movie.nameRU,
-            //         nameEN: movie.nameEN,
-            //         thumbnail: "https://api.nomoreparties.co" + movie.image.url,
-            //         movieId: movie.id,
-            //     }).then(() => {
-            //         getSavedMovies()
-            //     })
-            // }
-            setMoviesSavedCards([...item]);
-        }).catch((err) => console.log(err))
+        console.log('app js handle saving', movie);
+        const clicked = moviesSavedCards.some((i) => i.movieId === movie.id);
+        if (!clicked) {
+            mainApi.saveMovie(movie).then((item) => {
+                //сохрани
+                console.log(item)
+                // const clicked = moviesSavedCards.some((i) => i.movieId === movie.id);
+                // if (!clicked) {
+                //     mainApi.saveMovie({
+                //         country: movie.country,
+                //         director: movie.director,
+                //         duration: movie.duration,
+                //         year: movie.year,
+                //         description: movie.description,
+                //         image: "https://api.nomoreparties.co" + movie.image.url,
+                //         trailer: movie.trailerLink,
+                //         nameRU: movie.nameRU,
+                //         nameEN: movie.nameEN,
+                //         thumbnail: "https://api.nomoreparties.co" + movie.image.url,
+                //         movieId: movie.id,
+                //     }).then(() => {
+                //         getSavedMovies()
+                //     })
+                // }
+                setMoviesSavedCards([...item]);
+            }).catch((err) => console.log(err));
+        } else {
+            moviesSavedCards.some((i) =>
+                i.movieId === movie.id
+                    ? mainApi
+                        .deleteUsersMovie(i._id)
+                        .then(() => {
+                            getSavedMovies();
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        })
+                    : ''
+            );
+        }
+    }
+
+    // удаление фильма из сохраненных
+    function handleMovieDelete(movie) {
+        mainApi
+            .deleteUsersMovie(movie._id)
+            .then(() => {
+                setMoviesSavedCards((state) =>
+                    state.filter((i) => (i._id === movie._id ? '' : i))
+                );
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     function getSavedMovies() {
@@ -110,7 +140,7 @@ function App() {
         }).catch((err) => console.log(err))
     }
 
-    // контроль содержимого инпута поиска
+// контроль содержимого инпута поиска
     const handleChangeInputValue = (e) => {
         const target = e.target;
         const name = target.name;
@@ -120,7 +150,7 @@ function App() {
         // setIsValid(target.closest('form').checkValidity());
     };
 
-    // регистрация
+// регистрация
     function handleRegisterSubmit({name, email, password}) {
         mainApi.register(name, email, password).then((res) => {
             if (res) {
@@ -129,7 +159,7 @@ function App() {
         }).catch((e) => console.log(e));
     }
 
-    // вход
+// вход
     function handleLoginSubmit({email, password}) {
         mainApi.authorize(email, password).then((res) => {
             if (res) { //токен
@@ -139,7 +169,7 @@ function App() {
         }).catch((e) => console.log(e));
     }
 
-    // проверка токена
+// проверка токена
     function handleTokenCheck() {
         const token = localStorage.getItem("token");
         if (token) {
@@ -153,14 +183,14 @@ function App() {
         }
     }
 
-    // смена данных п-ля
+// смена данных п-ля
     function handleUserDataChange(name, email) {
         mainApi.changeUserInfo(name, email)
             .then((res) => setCurrentUser(res))
             .catch((err) => console.log(err))
     }
 
-    // выход
+// выход
     function handleLogout() {
         localStorage.removeItem("token");
         setCurrentUser({});
@@ -180,11 +210,13 @@ function App() {
                                     onChangeInput={handleChangeInputValue}
                                     onSaveCard={handleMovieSaving}
                                     moviesSavedCards={moviesSavedCards}
+
                     />
                     <ProtectedRoute
                         path="/saved-movies"
                         component={SavedMovies}
                         moviesSavedCards={moviesSavedCards}
+                        onDelete={handleMovieDelete}
                     />
                     <ProtectedRoute
                         path="/profile"

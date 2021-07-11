@@ -23,6 +23,7 @@ function MoviesCardList(props) {
                         year={item.year}
                         description={item.description}
                         onSave={props.onSave}
+                        onDelete={props.onDelete}
                         clicked={props.moviesSavedCards.some((i) =>
                         i.movieId === item.id
                         )}

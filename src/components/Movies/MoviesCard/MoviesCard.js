@@ -2,11 +2,18 @@ import '../../../common.css';
 import './moviesCard.css';
 import {useLocation} from "react-router-dom";
 import {useContext, useState} from "react";
-import {CurrentUserContext} from "../../../contexts/contexts.js";
-import {BeatFilmUrl} from "../../../utils/Constants.js";
+// import {CurrentUserContext} from "../../../contexts/contexts.js";
 
 function MoviesCard(props) {
     const {movie, movieId, nameRU, image, trailer, duration, country, director} = props;
+    const time = duration;
+    const hours = Math.floor(time / 60) + "ч";
+    const minutes = time % 60 + "м";
+    const location = useLocation();
+    // const user = useContext(CurrentUserContext);
+    const onSave = props.onSave;
+    const onDelete = props.onDelete;
+    const BeatFilmUrl = "https://api.nomoreparties.co";
     debugger
     const [state, setState] = useState({
         country: movie.country === null ? "null" : movie.country,
@@ -37,10 +44,8 @@ function MoviesCard(props) {
         owner: movie.owner ? movie.owner : null,
         _id: movie._id ? movie._id : null,
     });
-    const location = useLocation();
-    const user = useContext(CurrentUserContext);
-    const onSave = props.onSave;
 
+    // console.log(props.onDelete);
     // console.log(movie);
 
     function handleSaveClick() {
@@ -74,14 +79,11 @@ function MoviesCard(props) {
     }
 
     function handleDeleteClick() {
-        onSave(movie);
+        onDelete(state); // передаю всю карточку в ф-цию удаления, оттуда она возьмет id
     }
 
     /* const isOwner = owner === user._id;
      const btnClassName = `${isOwner ? "card__remove-button" : "card__save-button"}`;*/
-    const time = duration;
-    const hours = Math.floor(time / 60) + "ч";
-    const minutes = time % 60 + "м";
 
     return (
         <>

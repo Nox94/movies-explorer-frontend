@@ -4,6 +4,7 @@ import MoviesCard from "../Movies/MoviesCard/MoviesCard.js";
 
 function SavedMoviesCardList(props) {
     const savedMovies = props.savedMovies;
+    const onDelete = props.onDelete;
     // console.log(savedMovies); // приходят все сохраненные карточки
 
     return (
@@ -24,6 +25,7 @@ function SavedMoviesCardList(props) {
                         director={item.director}
                         year={item.year}
                         description={item.description}
+                        onDelete={onDelete}
                     />
                 ))}
             </ul>

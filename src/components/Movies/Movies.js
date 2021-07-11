@@ -21,6 +21,7 @@ function Movies(props) {
                 moviesCards={moviesCards.slice(0, plusCards)}
                 onSave={props.onSaveCard}
                 moviesSavedCards={props.moviesSavedCards}
+                onDelete={props.onDelete}
             />
             <button className={plusCards >= moviesCards.length ? "hidden" : "movies__more-button"}
                     type="button"
