@@ -40,6 +40,7 @@ function MoviesCard(props) {
     const location = useLocation();
     const user = useContext(CurrentUserContext);
     const onSave = props.onSave;
+
     // console.log(movie);
 
     function handleSaveClick() {
@@ -95,20 +96,20 @@ function MoviesCard(props) {
                             : <span className="card__timing">{minutes}</span>
                     }
                 </div>
-                {(location.pathname === "/movies") ? <button
-                    className="card__save-button"
-                    type="button"
-                    onClick={handleSaveClick}
-                >
-                    Сохранить
-                </button> : <button
-                    className="card__delete-button"
-                    type="button"
-                    onClick={handleDeleteClick}
-                >
-                    Удалить
-                </button>}
-
+                {(location.pathname === "/movies")
+                    ?
+                    <button
+                        className="card__save-button"
+                        type="button"
+                        onClick={handleSaveClick}>
+                        Сохранить
+                    </button>
+                    :
+                    <button
+                        className="card__remove-button"
+                        type="button"
+                        onClick={handleDeleteClick}
+                    />}
             </li>
         </>
     )

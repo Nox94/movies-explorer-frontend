@@ -18,7 +18,7 @@ function SavedMoviesCardList(props) {
                         nameEN={item.nameEN}
                         image={item.image}
                         thumbnail={item.image}
-                        trailer={item.trailerLink}
+                        trailer={item.trailer}
                         duration={item.duration}
                         country={item.country}
                         director={item.director}
