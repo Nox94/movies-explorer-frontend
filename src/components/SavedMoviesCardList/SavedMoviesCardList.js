@@ -1,12 +1,15 @@
 import '../../common.css';
 import MoviesCard from "../Movies/MoviesCard/MoviesCard.js";
-
+import {checkLocalStorage, getFromLocalStorage} from "../../utils/ExtraFunctions.js";
+import {useState} from 'react'
 
 function SavedMoviesCardList(props) {
-    const savedMovies = props.savedMovies;
+    const key = 'savedMovies'
     const onDelete = props.onDelete;
-    // console.log(savedMovies); // приходят все сохраненные карточки
-
+// приходят все сохраненные карточки
+    //при монтировании компонента создается стейт useState.
+    // начальные данные для которого он берет из локальнго хранилища
+    const [savedMovies, setSavedMovies] = useState(checkLocalStorage(key) ? getFromLocalStorage(key) : [])
     return (
         <section className="movies__container">
             <ul className="movies__card-list">
@@ -26,6 +29,7 @@ function SavedMoviesCardList(props) {
                         year={item.year}
                         description={item.description}
                         onDelete={onDelete}
+
                     />
                 ))}
             </ul>

@@ -14,8 +14,10 @@ import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.js";
 import * as mainApi from '../../utils/MainApi.js';
 import * as moviesApi from '../../utils/MoviesApi.js';
 import {CurrentUserContext, LoggedInContext} from "../../contexts/contexts.js";
+import {checkLocalStorage, getFromLocalStorage, setLocalStorage} from "../../utils/ExtraFunctions.js";
 
 function App() {
+    const beatMoviesKey = 'beat-movies'
     const [loggedIn, setLoggedIn] = useState(false);
     const [currentUser, setCurrentUser] = useState({});
     const [localMoviesCards, setLocalMoviesCards] = useState([]); // локальные фильмы
@@ -27,7 +29,11 @@ function App() {
 
     useEffect(() => {
         handleTokenCheck();
-        history.push(location);
+        if (!checkLocalStorage(beatMoviesKey)) {
+            moviesApi.getMovies().then(data =>
+                setLocalStorage(beatMoviesKey, data))
+        }
+        // history.push(location);
     }, [loggedIn]);
 
 
@@ -35,14 +41,14 @@ function App() {
     // оттуда помещаю результат в стейт-переменную
     // наполняю массив с карточками из переменной с локальными данными карточек
     // при перезагрузке страницы данные остаются на месте
-    useEffect(() => {
-        moviesApi.getMovies().then((data) => {
-            localStorage.setItem('beat-movies', JSON.stringify(data))
-            localStorage.setItem("searchedMovies", JSON.stringify(data));
-            const storageMovies = JSON.parse(localStorage.getItem("searchedMovies"));
-            setLocalMoviesCards([...storageMovies]);
-        }).catch((err) => console.log(err));
-    }, [])
+    // useEffect(() => {
+    //     moviesApi.getMovies().then((data) => {
+    //         localStorage.setItem('beat-movies', JSON.stringify(data))
+    //         localStorage.setItem("searchedMovies", JSON.stringify(data));
+    //         const storageMovies = JSON.parse(localStorage.getItem("searchedMovies"));
+    //         setLocalMoviesCards([...storageMovies]);
+    //     }).catch((err) => console.log(err));
+    // }, [])
 
     // рендер фильтрованных фильмов
     useEffect(() => {
@@ -77,31 +83,11 @@ function App() {
 
     // сохранение фильмов
     function handleMovieSaving(movie) {
-        console.log('app js handle saving', movie);
         const clicked = moviesSavedCards.some((i) => i.movieId === movie.id);
         if (!clicked) {
             mainApi.saveMovie(movie).then((item) => {
-                //сохрани
                 console.log(item)
-                // const clicked = moviesSavedCards.some((i) => i.movieId === movie.id);
-                // if (!clicked) {
-                //     mainApi.saveMovie({
-                //         country: movie.country,
-                //         director: movie.director,
-                //         duration: movie.duration,
-                //         year: movie.year,
-                //         description: movie.description,
-                //         image: "https://api.nomoreparties.co" + movie.image.url,
-                //         trailer: movie.trailerLink,
-                //         nameRU: movie.nameRU,
-                //         nameEN: movie.nameEN,
-                //         thumbnail: "https://api.nomoreparties.co" + movie.image.url,
-                //         movieId: movie.id,
-                //     }).then(() => {
-                //         getSavedMovies()
-                //     })
-                // }
-                setMoviesSavedCards([...item]);
+                console.log(getFromLocalStorage('savedMovies'))
             }).then(() => getSavedMovies()).catch((err) => console.log(err));
         } else {
             moviesSavedCards.some((i) =>
@@ -195,6 +181,7 @@ function App() {
 // выход
     function handleLogout() {
         localStorage.removeItem("token");
+        localStorage.removeItem(beatMoviesKey)
         setCurrentUser({});
         setLoggedIn(false);
     }

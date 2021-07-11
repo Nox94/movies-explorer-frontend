@@ -14,7 +14,6 @@ function MoviesCard(props) {
     const onSave = props.onSave;
     const onDelete = props.onDelete;
     const BeatFilmUrl = "https://api.nomoreparties.co";
-    debugger
     const [state, setState] = useState({
         country: movie.country === null ? "null" : movie.country,
         director: movie.director === null ? "null" : movie.director,
@@ -62,7 +61,6 @@ function MoviesCard(props) {
             thumbnail,
             movieId,
         } = state;
-        debugger
         onSave({
             country,
             director,
