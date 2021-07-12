@@ -31,9 +31,10 @@ export const authorize = (email, password) => {
 };
 // получение инфы п-ля
 export const getUsersInfo = (token) => {
+    console.log('getUsersInfo')
     return fetch(`${BaseUrl}/users/me`, {
         method: "GET",
-        headers: {...Headers, credential: 'include', Authorization: `Bearer ${token}`},
+        headers: {...Headers, Authorization: `Bearer ${token}`},
     })
         .then(HandleOriginalResponse)
         .catch((err) => console.log(err));
@@ -51,19 +52,7 @@ export const changeUserInfo = (name, email) => {
 }
 // сохранение фильма в свою БД
 // запрос на createMovie к своему серверу, он ждет объъект с полями фильма
-export const saveMovie = ({
-                              country,
-                              director,
-                              duration,
-                              year,
-                              description,
-                              image,
-                              trailer,
-                              thumbnail,
-                              nameRU,
-                              nameEN,
-                              movieId,
-                          }) => { // сюда должен приходить объект фильма
+export const saveMovie = (movie) => { // сюда должен приходить объект фильма
     /* console.log('save', {country,
          director,
          duration,
@@ -75,35 +64,25 @@ export const saveMovie = ({
          nameRU,
          nameEN,
          movieId}); // вывод в консоль того, что сохраняем*/
+    delete movie.id
+    delete movie.owner
+    delete movie._id
     return fetch(`${BaseUrl}/movies/`, {
         method: "POST",
         headers: {...Headers, Authorization: `Bearer ${Token}`},
-        body: JSON.stringify(
-            {
-                country,
-                director,
-                duration,
-                year,
-                description,
-                image,
-                trailer,
-                thumbnail,
-                nameRU,
-                nameEN,
-                movieId,
-            }
-        )
+        body: JSON.stringify(movie)
     }).then(HandleOriginalResponse).catch((err) => console.log(err));
 }
 // получаем из нашей БД все сохраненные фильмы п-ля для рендера
 export const getUsersSavedMovies = () => {
+    console.log('getUsersSavedMovies')
     return fetch(`${BaseUrl}/movies/`, {
         method: "GET",
         headers: {...Headers, Authorization: `Bearer ${Token}`}, // добавила тут токен
     })
         .then(HandleOriginalResponse)
         .then((res) => {
-            console.log(res);
+            // console.log(res);
             return res; // возвращает объект ответа, все сохраненные карточки
         })
         .catch((err) => console.log(err));

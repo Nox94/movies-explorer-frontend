@@ -13,22 +13,23 @@ function MoviesCardList(props) {
                     <MoviesCard
                         movie={item}
                         key={item.id}
-                        movieId={item.id}
-                        nameRU={item.nameRU}
-                        nameEN={item.nameEN}
-                        image={"https://api.nomoreparties.co" + item.image.url}
-                        thumbnail={"https://api.nomoreparties.co" + item.image.url}
-                        trailer={item.trailerLink}
-                        duration={item.duration}
-                        country={item.country}
-                        director={item.director}
-                        year={item.year}
-                        description={item.description}
+                        // movieId={item.id}
+                        // nameRU={item.nameRU}
+                        // nameEN={item.nameEN}
+                        // image={"https://api.nomoreparties.co" + item.image.url}
+                        // thumbnail={"https://api.nomoreparties.co" + item.image.url}
+                        // trailer={item.trailerLink}
+                        // duration={item.duration}
+                        // country={item.country}
+                        // director={item.director}
+                        // year={item.year}
+                        // description={item.description}
                         onSave={props.onSave}
                         onDelete={props.onDelete}
-                        clicked={props.moviesSavedCards.some((i) =>
-                        i.movieId === item.id
-                        )}
+                        // clicked={props.moviesSavedCards.some((i) =>
+                        // i.movieId === item.id
+                        // )}
+                        clicked={props.clicked}
                     />
                 ))}
             </ul>

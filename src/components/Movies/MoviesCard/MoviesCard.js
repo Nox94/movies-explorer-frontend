@@ -1,18 +1,14 @@
 import '../../../common.css';
 import './moviesCard.css';
 import {useLocation} from "react-router-dom";
-import {useContext, useState} from "react";
+import {useState} from "react";
+
 // import {CurrentUserContext} from "../../../contexts/contexts.js";
 
 function MoviesCard(props) {
-    const {movie, movieId, nameRU, image, trailer, duration, country, director} = props;
-    const time = duration;
-    const hours = Math.floor(time / 60) + "ч";
-    const minutes = time % 60 + "м";
+    const {movie, movieId, onSave, onDelete} = props;
     const location = useLocation();
     // const user = useContext(CurrentUserContext);
-    const onSave = props.onSave;
-    const onDelete = props.onDelete;
     const BeatFilmUrl = "https://api.nomoreparties.co";
     const [state, setState] = useState({
         country: movie.country === null ? "null" : movie.country,
@@ -39,41 +35,52 @@ function MoviesCard(props) {
         thumbnail: movie.thumbnail
             ? movie.thumbnail
             : BeatFilmUrl + movie.image.formats.thumbnail.url,
-        movieId: movie.id,
+        movieId: movie.movieId, //есть только у пользовательских
+        id: movie.id, //есть только у карточек с бит филма
         owner: movie.owner ? movie.owner : null,
         _id: movie._id ? movie._id : null,
     });
+    const {nameRU, image, duration} = state
+    const hours = Math.floor(duration / 60) + "ч";
+    const minutes = duration % 60 + "м";
+    // const [clicked, setClicked] = useState(props.clicked(movie.id))
+
+    // function handleClicked() {
+    //     setClicked(!clicked)
+    // }
 
     // console.log(props.onDelete);
     // console.log(movie);
 
     function handleSaveClick() {
-        const {
-            country,
-            director,
-            duration,
-            year,
-            description,
-            image,
-            trailer,
-            nameRU,
-            nameEN,
-            thumbnail,
-            movieId,
-        } = state;
-        onSave({
-            country,
-            director,
-            duration,
-            year,
-            description,
-            image,
-            trailer,
-            nameRU,
-            nameEN,
-            thumbnail,
-            movieId,
-        });
+        // const {
+        //     country,
+        //     director,
+        //     duration,
+        //     year,
+        //     description,
+        //     image,
+        //     trailer,
+        //     nameRU,
+        //     nameEN,
+        //     thumbnail,
+        //     movieId,
+        // } = state;
+        // onSave({
+        //     country,
+        //     director,
+        //     duration,
+        //     year,
+        //     description,
+        //     image,
+        //     trailer,
+        //     nameRU,
+        //     nameEN,
+        //     thumbnail,
+        //     movieId,
+        // });
+        onSave(state)
+        // handleClicked()
     }
 
     function handleDeleteClick() {
@@ -89,20 +96,18 @@ function MoviesCard(props) {
                 <img src={image} alt="Миниатюра постера фильма." className="card__image"/>
                 <div className="card__wrapper">
                     <p className="card__capture">{nameRU}</p>
-                    {time > 60
+                    {duration > 60
                         ? <span className="card__timing">{hours} {minutes}</span>
-                        : (time === 60)
-                            ? <span className="card__timing">1ч</span>
-                            : <span className="card__timing">{minutes}</span>
+                        : <span className="card__timing">{minutes}</span>
                     }
                 </div>
                 {(location.pathname === "/movies")
                     ?
                     <button
-                        className="card__save-button"
+                        className={`card__save-button ${props.clicked(movie) ? 'card__save-button_clicked' : ''}`}
                         type="button"
                         onClick={handleSaveClick}>
-                        Сохранить
+                        {props.clicked(movie) ? '' : 'Сохранить'}
                     </button>
                     :
                     <button

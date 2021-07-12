@@ -42,7 +42,7 @@ export default function InfoTooltip(props) {
                         src={props.status === "success" ? successImg : failImg}
                     />
                     <h2 style={style.heading} className="popup__heading">
-                        {props.status === "success"
+                        {props.message !== '' ? props.message : props.status === "success"
                             ? "Выполнено успешно."
                             : "Что-то пошло не так! Попробуйте ещё раз."}
                     </h2>

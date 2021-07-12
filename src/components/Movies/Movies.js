@@ -4,13 +4,8 @@ import '../../common.css';
 import SearchForm from "./SearchForm/SearchForm.js";
 import MoviesCardList from './MoviesCardList/MoviesCardList';
 import useWindowSize from "../../hooks/useWindowSize.js";
-import {checkLocalStorage, getFromLocalStorage} from "../../utils/ExtraFunctions.js";
 
 function Movies(props) {
-    const key = 'beat-movies'
-    const moviesCards = props.moviesCards;
-    const handleSearch = props.onSearch;
-    const [films, setFilms] = useState(checkLocalStorage(key) ? getFromLocalStorage(key):[])
     const [plusCards, setPlusCards] = useState(3);
     const {width} = useWindowSize();
     const showMoreMovies = () => {
@@ -19,20 +14,25 @@ function Movies(props) {
     }
     return (
         <>
-            <SearchForm onSubmit={handleSearch} onChange={props.onChangeInput}/>
+            <SearchForm onSubmit={props.onSearch} onChange={props.onChangeInput} onShortCheck={props.onShortCheck}
+                        isvalid={props.isValid} errors={props.errors} values={props.values} checked={props.checked}/>
             <MoviesCardList
-                moviesCards={moviesCards.slice(0, plusCards)}
+                moviesCards={props.foundMovies.slice(0, plusCards)}
                 onSave={props.onSaveCard}
-                moviesSavedCards={props.moviesSavedCards}
                 onDelete={props.onDelete}
+                clicked={props.clicked}
+                preloader={props.preloader}
             />
-            <button className={plusCards >= moviesCards.length ? "hidden" : "movies__more-button"}
+            <button className={plusCards >= props.foundMovies.length ? "hidden" : "movies__more-button"}
                     type="button"
                     onClick={showMoreMovies}>
                 Еще
             </button>
         </>
     );
+}
+function  Ass(){
+    return <></>
 }
 
 export default Movies;
