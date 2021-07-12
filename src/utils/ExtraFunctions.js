@@ -9,3 +9,7 @@ export function getFromLocalStorage(key) {
 export function setLocalStorage(key, item) {
     localStorage.setItem(key, JSON.stringify(item))
 }
+
+export function initialValuesFromLS(key, initValues) {
+    return checkLocalStorage(key) ? getFromLocalStorage(key) : initValues
+}
