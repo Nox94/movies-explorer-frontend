@@ -4,14 +4,20 @@ import SearchForm from "../Movies/SearchForm/SearchForm.js";
 import SavedMoviesCardList from '../SavedMoviesCardList/SavedMoviesCardList.js';
 
 function SavedMovies(props) {
-    const savedMovies = props.moviesSavedCards;
-
+    useEffect(() => {
+            return props.reset()
+        }, []
+    )
     return (
         <>
-            <SearchForm/>
+            <SearchForm isvalid={props.isValid} onShortCheck={props.onShortCheck} checked={props.checked}
+                        onSubmit={props.onSearch} onChange={props.onChangeInput} values={props.values}
+                        errors={props.errors}/>
             <SavedMoviesCardList
                 onDelete={props.onDelete}
-                savedMovies={savedMovies}/>
+                moviesSavedCards={props.moviesSavedCards}
+                preloader={props.preloader}
+            />
         </>
     );
 }

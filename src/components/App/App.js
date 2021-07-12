@@ -132,9 +132,9 @@ function App() {
         const target = e.target;
         const name = target.name;
         const value = target.value;
-        setInputValue({...inputValue, [name]: value});
-        // setErrors({ ...errors, [name]: target.validationMessage });
-        // setIsValid(target.closest('form').checkValidity());
+        setValues({...values, [name]: value});
+        setErrors({...errors, [name]: target.validationMessage});
+        setIsValid({...isValid, [target.closest('form').id]: target.closest('form').checkValidity()});
     };
 
 // регистрация
@@ -202,10 +202,10 @@ function App() {
             })
     }
 
-    // открытие попапа с сообщением
-    function handlePopupOpening() {
-        setToolTipOpen(true);
-    }
+    /*    // открытие попапа с сообщением
+        function handlePopupOpening() {
+            setToolTipOpen(true);
+        }*/
 
     // закрытие попапа с сообщением
     function handlePopupClosing() {
@@ -229,17 +229,31 @@ function App() {
                     <ProtectedRoute path="/movies"
                                     component={Movies}
                                     onSearch={handleMoviesSearch}
-                                    moviesCards={foundMovies}
+                                    foundMovies={bmovies()}
                                     onChangeInput={handleChangeInputValue}
                                     onSaveCard={handleMovieSaving}
-                                    moviesSavedCards={moviesSavedCards}
-
+                                    clicked={checkClicked}
+                                    preloader={preloader}
+                                    onShortCheck={handleShortFilm}
+                                    checked={isShortFilm}
+                                    isValid={isValid}
+                                    errors={errors}
+                                    values={values}
                     />
                     <ProtectedRoute
                         path="/saved-movies"
                         component={SavedMovies}
                         moviesSavedCards={moviesSavedCards}
                         onDelete={handleMovieDelete}
+                        preloader={preloader}
+                        onShortCheck={handleShortFilm}
+                        checked={isShortFilm}
+                        onSearch={handleSavedSearch}
+                        onChangeInput={handleChangeInputValue}
+                        isValid={isValid}
+                        errors={errors}
+                        values={values}
+                        reset={resetSaved}
                     />
                     <ProtectedRoute
                         path="/profile"

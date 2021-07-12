@@ -1,7 +1,6 @@
 import '../../common.css';
 import MoviesCard from "../Movies/MoviesCard/MoviesCard.js";
-import {checkLocalStorage, getFromLocalStorage} from "../../utils/ExtraFunctions.js";
-import {useState} from 'react'
+import Preloader from "../Preloader/Preloader.js";
 
 function SavedMoviesCardList(props) {
     const key = 'savedMovies'

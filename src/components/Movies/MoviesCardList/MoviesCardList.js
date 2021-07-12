@@ -1,12 +1,14 @@
 import '../../../common.css';
 import './moviesCardList.css';
 import MoviesCard from "../MoviesCard/MoviesCard";
+import Preloader from "../../Preloader/Preloader.js";
 
 function MoviesCardList(props) {
     const movies = props.moviesCards;
     return (
         <section className="movies__container">
             <ul className="movies__card-list">
+                {props.preloader && <Preloader/>}
                 {movies.map((item) => (
                     <MoviesCard
                         movie={item}
