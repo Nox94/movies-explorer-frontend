@@ -4,8 +4,10 @@ import {Link, useLocation} from "react-router-dom";
 import React from "react";
 import icon from '../../../images/icon_account.svg';
 import iconWhite from '../../../images/icon_accountwhite.svg';
+// import burgerWhite from '../../../images/burger-icon_white.svg';
 import useWindowSize from "../../../hooks/useWindowSize.js";
 import {BlackColor, WhiteColor} from "../../../utils/Constants.js";
+
 
 function Navigation() {
 
@@ -16,10 +18,11 @@ function Navigation() {
     function handleMenuClick() {
         setIsNavMenuOpen(!isNavMenuOpen);
     }
+    // style={{backgroundImage: burgerWhite}}
 
     return <section className="navigation">
         {width <= 1000 && <div>
-            <button className="navigation__burger" onClick={handleMenuClick}/>
+            <button className="navigation__burger"  onClick={handleMenuClick}/>
             <div className={`${isNavMenuOpen && "navigation__cover"}`}/>
             <div className={`navigation__popup ${isNavMenuOpen && "navigation__popup_visible"}`}>
                 <button className="navigation__close-button" type="button" onClick={handleMenuClick}/>

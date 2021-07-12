@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import {Route, Switch, useHistory, useLocation} from "react-router-dom";
+import {Route, Switch, useHistory} from "react-router-dom";
 import Header from "../Header/Header.js";
 import Movies from "../Movies/Movies.js";
 import SavedMovies from "../SavedMovies/SavedMovies.js"
@@ -14,7 +14,13 @@ import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.js";
 import * as mainApi from '../../utils/MainApi.js';
 import * as moviesApi from '../../utils/MoviesApi.js';
 import {CurrentUserContext, LoggedInContext} from "../../contexts/contexts.js";
-import {checkLocalStorage, getFromLocalStorage, setLocalStorage} from "../../utils/ExtraFunctions.js";
+import {
+    checkLocalStorage,
+    getFromLocalStorage,
+    initialValuesFromLS,
+    setLocalStorage
+} from "../../utils/ExtraFunctions.js";
+import InfoTooltip from "../InfoTooltip/InfoTooltip.js";
 
 function App() {
     const beatMoviesKey = 'beat-movies'
@@ -74,7 +80,7 @@ function App() {
                 const nameEN = item.nameEN;
                 return (nameEN && true && nameEN.toLowerCase().includes(search)) || (nameRU && true && nameRU.toLowerCase().includes(search))
                     ? item
-                    : console.log('Нет фильмов по запросу.');
+                    : (setToolTipStatus("fail") && setToolTipOpen(true) && console.log('Нет фильмов по запросу.'));
             });
             localStorage.setItem('filteredMovies', JSON.stringify(filteredMovies));
             setFoundMovies(filteredMovies);
@@ -103,6 +109,7 @@ function App() {
                     : ''
             );
         }
+        //нужно поменять стейт карточки?
     }
 
     // удаление фильма из сохраненных
@@ -119,14 +126,6 @@ function App() {
             });
     }
 
-    function getSavedMovies() {
-        mainApi.getUsersSavedMovies().then((res) => {
-            console.log(res);
-            localStorage.setItem("savedMovies", JSON.stringify(res));
-            const savedMovies = JSON.parse(localStorage.getItem("savedMovies"));
-            setMoviesSavedCards(savedMovies);
-        }).catch((err) => console.log(err))
-    }
 
 // контроль содержимого инпута поиска
     const handleChangeInputValue = (e) => {
@@ -142,9 +141,19 @@ function App() {
     function handleRegisterSubmit({name, email, password}) {
         mainApi.register(name, email, password).then((res) => {
             if (res) {
+                setToolTipStatus("success"); // успешно зарегистрировались
+                setToolTipOpen(true);
                 history.push('/signin')
+            } else if (!res.ok) {
+                setToolTipStatus("fail"); // ошибка при попытке рег-ии
+                setToolTipOpen(true);
             }
-        }).catch((e) => console.log(e));
+        })
+            .catch((e) => {
+                setToolTipStatus("fail"); // ошибка при попытке рег-ии
+                setToolTipOpen(true);
+                console.log(e);
+            });
     }
 
 // вход
@@ -153,8 +162,15 @@ function App() {
             if (res) { //токен
                 setLoggedIn(true);
                 history.push('/movies');
+            } else if (!res) {
+                setToolTipStatus("fail"); // ошибка при попытке войти
+                setToolTipOpen(true);
             }
-        }).catch((e) => console.log(e));
+        }).catch((e) => {
+            setToolTipStatus("fail"); // ошибка при попытке войти
+            setToolTipOpen(true);
+            console.log(e);
+        });
     }
 
 // проверка токена
@@ -174,8 +190,26 @@ function App() {
 // смена данных п-ля
     function handleUserDataChange(name, email) {
         mainApi.changeUserInfo(name, email)
-            .then((res) => setCurrentUser(res))
-            .catch((err) => console.log(err))
+            .then((res) => {
+                setToolTipStatus("success"); // данные успешно изменены
+                setToolTipOpen(true);
+                setCurrentUser(res);
+            })
+            .catch((e) => {
+                setToolTipStatus("fail"); // ошибка при обновлении данных
+                setToolTipOpen(true);
+                console.log(e);
+            })
+    }
+
+    // открытие попапа с сообщением
+    function handlePopupOpening() {
+        setToolTipOpen(true);
+    }
+
+    // закрытие попапа с сообщением
+    function handlePopupClosing() {
+        setToolTipOpen(false);
     }
 
 // выход
@@ -217,6 +251,11 @@ function App() {
                     <Route path="/signup" render={() => <Register onRegister={handleRegisterSubmit}/>}/>
                     <Route path="*" component={PageNotFound}/>
                 </Switch>
+                <InfoTooltip
+                    isOpen={toolTipOpen}
+                    status={toolTipStatus}
+                    onClose={handlePopupClosing}
+                />
                 <Footer/>
             </LoggedInContext.Provider>
         </CurrentUserContext.Provider>
