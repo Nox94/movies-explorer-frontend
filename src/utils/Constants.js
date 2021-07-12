@@ -26,7 +26,7 @@ export const BeatFilmUrl = "https://api.nomoreparties.co/beatfilm-movies";
 
 export const BaseUrl =
     process.env.NODE_ENV === 'production'
-        ? 'https://nox-movies-explorer.nomoredomains.icu/'
+        ? 'https://nox-movies-explorer.nomoredomains.icu'
         : 'http://192.168.1.178:3002';
 
 export const Headers = {
