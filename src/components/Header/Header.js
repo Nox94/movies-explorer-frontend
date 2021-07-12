@@ -8,7 +8,7 @@ import {HeaderPlum, HeaderWhite} from "../../utils/Constants.js";
 import {LoggedInContext} from "../../contexts/contexts.js";
 
 function Header() {
-    const {loggedIn} = React.useContext(LoggedInContext)
+    const {loggedIn} = React.useContext(LoggedInContext);
     const location = useLocation();
     let nav;
     if (!loggedIn) {
@@ -29,16 +29,7 @@ function Header() {
             <header className="header"
                     style={(location.pathname === "/") ? HeaderPlum : HeaderWhite}>
                 <Link className="link" to="/"><Logo/></Link>
-                {/*{nav}*/}
-                <p>{console.log('header says г к', loggedIn)}</p>
-                {loggedIn ? <Navigation/> : <div className="header__link-wrapper">
-                    <Link to="/signup" className="header__register-link">
-                        Регистрация
-                    </Link>
-                    <Link to="/signin" className="header__login-link">
-                        Войти
-                    </Link>
-                </div>}
+                {nav}
             </header>
         </Route>
     )
