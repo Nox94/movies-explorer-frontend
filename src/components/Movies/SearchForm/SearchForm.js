@@ -7,6 +7,7 @@ import {useLocation} from "react-router-dom";
 
 
 export default function SearchForm(props) {
+    const location = useLocation()
     const onSubmit = props.onSubmit;
     const errors = props.errors;
     const values = props.values;
@@ -26,6 +27,7 @@ export default function SearchForm(props) {
                        placeholder="Фильм"
                        name={qt ? 'search' : 'saveSearch'}
                        required
+                       minLength={1}
                        type="text"
                        onChange={props.onChange}
                        id={qt ? 'search-movies' : 'save-search-movies'}
@@ -37,7 +39,7 @@ export default function SearchForm(props) {
                         disabled={qt ? !isValid.searchForm : !isValid.saveSearchForm}>Найти
                 </button>
             </form>
-            <FilterCheckbox/>
+            <FilterCheckbox onShortCheck={props.onShortCheck} checked={props.checked}/>
             <hr className="line search__line" color={GrayColor} size="1"/>
         </section>
     )

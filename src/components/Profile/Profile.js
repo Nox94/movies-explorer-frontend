@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 
 
 function Profile(props) {
-
+    const {values, errors, isValid, onChangeInput} = props
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const user = useContext(CurrentUserContext);
@@ -32,38 +32,54 @@ function Profile(props) {
     return (
         <section className="profile">
             <h2 className="profile__heading">Привет, {user.name}!</h2>
-            <form className="profile__form" onSubmit={handleSubmit}>
-                <div style={{display: "flex", flexDirection: "column", width: "100%", justifyContent: "space-between", alignItems: "center"}}>
-                <div className="profile__wrapper">
-                    <label className="profile__label" htmlFor="input-name">
-                        Имя
-                    </label>
-                    <input
-                        className="profile__input"
-                        name={'name'}
-                        id="input-name"
-                        value={name || ''}
-                        type={'text'}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <hr className="line profile__line" size={'1'} color={'#EDEDED'}/>
-                <div className="profile__wrapper">
-                    <label className="profile__label" htmlFor="input-email">
-                        E-mail
-                    </label>
-                    <input
-                        className="profile__input"
-                        name={'email'}
-                        id="input-email"
-                        value={email || ''}
-                        type={'email'}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <button className="profile__button link" type="submit">Редактировать</button>
+            <form className="profile__form" onSubmit={handleSubmit} id={'profileForm'}>
+                <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "100%",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                }}>
+                    <div className="profile__wrapper">
+                        <label className="profile__label" htmlFor="input-name">
+                            Имя
+                        </label>
+                        <input
+                            className="profile__input"
+                            name={'profileName'}
+                            id="input-name"
+                            value={values.profileName}
+                            type={'text'}
+                            minLength={4}
+                            onChange={onChangeInput}
+                            placeholder={user.name}
+                            required
+                        />
+                        {errors.profileName && <span className="profile__error-message">{errors.profileName}</span>}
+                    </div>
+
+                    <hr className="line profile__line" size={'1'} color={'#EDEDED'}/>
+                    <div className="profile__wrapper">
+                        <label className="profile__label" htmlFor="input-email">
+                            E-mail
+                        </label>
+                        <input
+                            className="profile__input"
+                            name={'profileEmail'}
+                            id="input-email"
+                            value={values.profileEmail}
+                            type={'email'}
+                            minLength={4}
+                            onChange={onChangeInput}
+                            placeholder={user.email}
+                            required
+                        />
+                        {errors.profileEmail && <span className="profile__error-message">{errors.profileEmail}</span>}
+                    </div>
+
+                    <button className="profile__button link" type="submit"
+                            disabled={!isValid.profileForm}>Редактировать
+                    </button>
                 </div>
             </form>
 

@@ -3,10 +3,10 @@ import './login.css';
 import Form from "../Form/Form.js";
 
 function Login(props) {
-    const handleSubmit = props.onLogin;
     return (
         <section className="login section">
-            <Form onLoginSubmit={handleSubmit}/>
+            <Form onSubmit={props.onSubmit} values={props.values} isValid={props.isValid}
+                  errors={props.errors} onChangeInput={props.onChangeInput}/>
         </section>
     )
 }

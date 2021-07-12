@@ -2,6 +2,7 @@ import '../../common.css';
 import './savedMovies.css'
 import SearchForm from "../Movies/SearchForm/SearchForm.js";
 import SavedMoviesCardList from '../SavedMoviesCardList/SavedMoviesCardList.js';
+import {useEffect} from "react";
 
 function SavedMovies(props) {
     useEffect(() => {
@@ -20,6 +21,10 @@ function SavedMovies(props) {
             />
         </>
     );
+}
+
+function Ass() {
+    return <></>
 }
 
 export default SavedMovies;

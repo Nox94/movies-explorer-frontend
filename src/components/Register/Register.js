@@ -3,10 +3,10 @@ import './register.css';
 import Form from "../Form/Form.js";
 
 function Register(props) {
-const handleSubmit = props.onRegister;
     return (
         <section className="register section">
-            <Form onRegisterSubmit={handleSubmit}/>
+            <Form onSubmit={props.onSubmit} values={props.values} isValid={props.isValid}
+                  errors={props.errors} onChangeInput={props.onChangeInput}/>
         </section>
     )
 }
