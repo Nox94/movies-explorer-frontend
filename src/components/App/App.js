@@ -24,24 +24,63 @@ import InfoTooltip from "../InfoTooltip/InfoTooltip.js";
 
 function App() {
     const beatMoviesKey = 'beat-movies'
+    const foundMoviesKey = 'filteredMovies'
+    const searchWord = 'search-word'
+    const savedMoviesKey = 'savedMovies'
     const [loggedIn, setLoggedIn] = useState(false);
     const [currentUser, setCurrentUser] = useState({});
-    const [localMoviesCards, setLocalMoviesCards] = useState([]); // локальные фильмы
-    const [foundMovies, setFoundMovies] = useState([]); // найденные фильмы
+    const [localMoviesCards, setLocalMoviesCards] = useState(initialValuesFromLS(beatMoviesKey, [])); // локальные фильмы
+    const [foundMovies, setFoundMovies] = useState(initialValuesFromLS(foundMoviesKey, []));
+    // найденные фильмы
     const [moviesSavedCards, setMoviesSavedCards] = useState([]); // сохраненные фильмы
-    const [inputValue, setInputValue] = useState({});
-    const location = useLocation();
+    const [values, setValues] = useState({
+        search: initialValuesFromLS(searchWord, ''),
+        saveSearch: '',
+        signinEmail: '',
+        signupEmail: '',
+        signupName: '',
+        signupPassword: '',
+        signinPassword: '',
+        profileName: '',
+        profileEmail: '',
+    });
+    const [toolTipStatus, setToolTipStatus] = useState("fail"); //начальное сообщение попапа
+    const [toolTipMessage, setToolTipMessage] = useState('')
+    const [toolTipOpen, setToolTipOpen] = useState(false); // управление отображением попапа
+    const [preloader, setPreloader] = useState(false);
+    const [errors, setErrors] = React.useState({});
+    const [isValid, setIsValid] = useState({
+        searchForm: false,
+        saveSearchForm: false,
+        profileForm: false,
+        signinForm: false,
+        signupForm: false
+    });
     const history = useHistory();
-
+    const [isShortFilm, setShortFilm] = useState(false)
     useEffect(() => {
         handleTokenCheck();
-        if (!checkLocalStorage(beatMoviesKey)) {
-            moviesApi.getMovies().then(data =>
-                setLocalStorage(beatMoviesKey, data))
-        }
-        // history.push(location);
+        init()
     }, [loggedIn]);
 
+    useEffect(() => {
+        init()
+    }, [])
+
+    function init() {
+        const isToken = checkLocalStorage('token')
+        console.log('Token is', isToken)
+        const isBeatMovies = checkLocalStorage(beatMoviesKey)
+        const foundMovies = checkLocalStorage(foundMoviesKey)
+        if (isToken) {
+            if (!isBeatMovies) {
+                moviesApi.getMovies().then(data =>
+                    setLocalStorage(beatMoviesKey, data))
+            }
+            // рендер сохраненных фильмов из локального хранилища
+            getSavedMovies();
+        }
+    }
 
     // при загрузке страницы вызываю метод поиска фильмов и помещаю результат в локальное хранилище,
     // оттуда помещаю результат в стейт-переменную
@@ -66,36 +105,107 @@ function App() {
         }
     }, []);
 
-    // рендер сохраненных фильмов из локального хранилища
-    useEffect(() => {
-        getSavedMovies();
-    }, []);
+    // // рендер сохраненных фильмов из локального хранилища
+    // useEffect(() => {
+    //     getSavedMovies();
+    // }, []);
+
+    // получение сохраненных фильмов пользователя
+    function getSavedMovies() {
+        mainApi.getUsersSavedMovies().then((res) => {
+            console.log('saved movies', res);
+            setLocalStorage(savedMoviesKey, res)
+            setMoviesSavedCards(res);
+        }).catch((err) => console.log(err))
+    }
+
+    function checkClicked(movie) {
+        //у проверяемого должен быть id
+        return moviesSavedCards.length > 0 ? moviesSavedCards.some(i => i.movieId === movie.id) : false
+    }
+
+    // проверка токена
+    function handleTokenCheck() {
+        const isToken = checkLocalStorage('token')
+        const token = isToken ? localStorage.getItem('token') : ''
+        if (isToken) {
+            mainApi.getUsersInfo(token).then((res) => {
+                setLoggedIn(true);
+                setCurrentUser(res);
+            }).catch((e) => console.log(e));
+        }
+    }
 
     // поиск фильмов
-    function handleMoviesSearch() {
-        setTimeout(() => {
+    async function handleMoviesSearch() {
+        if (isValid) {
+            const delay = 1000
+
+            function sleep(ms) {
+                return new Promise((resolve) => setTimeout(resolve, ms));
+            }
+
+            setPreloader(true);
+            console.log(localMoviesCards)
+            // setPreloader(true); // прелоадер до получения результатов активен
+            await sleep(delay)
             const filteredMovies = localMoviesCards.filter((item) => {
-                const search = inputValue.search.toLowerCase();
-                const nameRU = item.nameRU.toLowerCase();
-                const nameEN = item.nameEN;
-                return (nameEN && true && nameEN.toLowerCase().includes(search)) || (nameRU && true && nameRU.toLowerCase().includes(search))
+                const search = values.search.toLowerCase();
+                const nameRU = item.nameRU === null ? 'null' : item.nameRU.toLowerCase();
+                const nameEN = item.nameEN === null ? 'null' : item.nameEN.toLowerCase();
+                return (nameEN && true && nameEN.includes(search)) || (nameRU && true && nameRU.includes(search))
                     ? item
                     : (setToolTipStatus("fail") && setToolTipOpen(true) && console.log('Нет фильмов по запросу.'));
             });
-            localStorage.setItem('filteredMovies', JSON.stringify(filteredMovies));
+            setLocalStorage('filteredMovies', filteredMovies)
             setFoundMovies(filteredMovies);
-        }, 1000)
+            setLocalStorage('search-word', values.search)
+            console.log('найдено', filteredMovies)
+            // прелоадер после получения результатов неактивен
+            setPreloader(false)
+            if (filteredMovies.length === 0) {
+                setToolTipMessage('Ничего не найдено')
+                setToolTipOpen(true)
+            }
+        }
+    }
+
+    function handleSavedSearch() {
+        const search = values.saveSearch.toLowerCase();
+        const f = moviesSavedCards.filter((item) => {
+            const nameRU = item.nameRU === null ? 'null' : item.nameRU.toLowerCase();
+            const nameEN = item.nameEN === null ? 'null' : item.nameEN.toLowerCase();
+            return (nameEN && true && nameEN.includes(search)) || (nameRU && true && nameRU.includes(search))
+                ? item
+                : (setToolTipStatus("fail") && setToolTipOpen(true) && console.log('Нет фильмов по запросу.'));
+        })
+        console.log('saved search', f)
+        console.log('saved term', search)
+        if (f.length > 0) {
+            setMoviesSavedCards(f)
+        } else if (f.length === 0) {
+            setToolTipMessage('Ничего не найдено')
+            setToolTipOpen(true)
+        }
     }
 
     // сохранение фильмов
     function handleMovieSaving(movie) {
-        const clicked = moviesSavedCards.some((i) => i.movieId === movie.id);
-        if (!clicked) {
-            mainApi.saveMovie(movie).then((item) => {
+        //проверка кликнутости
+        console.log(movie)
+
+        //если не кликнуто, то отправим запрос на сохранение
+        if (!checkClicked(movie)) {
+            mainApi.saveMovie({...movie, movieId: movie.id}).then((item) => {
                 console.log(item)
                 console.log(getFromLocalStorage('savedMovies'))
-            }).then(() => getSavedMovies()).catch((err) => console.log(err));
+                //изменить стейт + лс
+            }).then(() => getSavedMovies()).catch((err) => {
+                setToolTipOpen(true)
+                console.log(err)
+            });
         } else {
+            //если кликнуто, то отправим запрос на удаление
             moviesSavedCards.some((i) =>
                 i.movieId === movie.id
                     ? mainApi
@@ -104,6 +214,7 @@ function App() {
                             getSavedMovies();
                         })
                         .catch((err) => {
+                            setToolTipOpen(true)
                             console.log(err);
                         })
                     : ''
@@ -130,6 +241,7 @@ function App() {
 // контроль содержимого инпута поиска
     const handleChangeInputValue = (e) => {
         const target = e.target;
+        console.log(target.closest('form').id)
         const name = target.name;
         const value = target.value;
         setValues({...values, [name]: value});
@@ -138,8 +250,9 @@ function App() {
     };
 
 // регистрация
-    function handleRegisterSubmit({name, email, password}) {
-        mainApi.register(name, email, password).then((res) => {
+    function handleRegisterSubmit() {
+        const {signupName, signupEmail, signupPassword} = values
+        mainApi.register(signupName, signupEmail, signupPassword).then((res) => {
             if (res) {
                 setToolTipStatus("success"); // успешно зарегистрировались
                 setToolTipOpen(true);
@@ -157,8 +270,9 @@ function App() {
     }
 
 // вход
-    function handleLoginSubmit({email, password}) {
-        mainApi.authorize(email, password).then((res) => {
+    function handleLoginSubmit() {
+        const {signinEmail, signinPassword} = values
+        mainApi.authorize(signinEmail, signinPassword).then((res) => {
             if (res) { //токен
                 setLoggedIn(true);
                 history.push('/movies');
@@ -173,23 +287,12 @@ function App() {
         });
     }
 
-// проверка токена
-    function handleTokenCheck() {
-        const token = localStorage.getItem("token");
-        if (token) {
-            mainApi.getUsersInfo(token).then((res) => {
-                if (res) { //объект пользователя
-                    setLoggedIn(true);
-                    setCurrentUser(res);
-                    // history.push("/movies");
-                }
-            }).catch((e) => console.log(e));
-        }
-    }
 
 // смена данных п-ля
-    function handleUserDataChange(name, email) {
-        mainApi.changeUserInfo(name, email)
+    function handleUserDataChange() {
+        // const {name, email} = values
+        const {profileName, profileEmail} = values
+        mainApi.changeUserInfo(profileName, profileEmail)
             .then((res) => {
                 setToolTipStatus("success"); // данные успешно изменены
                 setToolTipOpen(true);
@@ -210,6 +313,7 @@ function App() {
     // закрытие попапа с сообщением
     function handlePopupClosing() {
         setToolTipOpen(false);
+        setToolTipMessage('');
     }
 
 // выход
@@ -219,6 +323,20 @@ function App() {
         setCurrentUser({});
         setLoggedIn(false);
     }
+
+    function handleShortFilm() {
+        setShortFilm(!isShortFilm)
+    }
+
+    function resetSaved() {
+        if (checkLocalStorage('savedMovies')) {
+            const ls = getFromLocalStorage('savedMovies')
+            setMoviesSavedCards(ls)
+        }
+    }
+
+    const bmovies = () => isShortFilm ? foundMovies.filter(i => i.duration <= 40) : foundMovies
+    const smovies = () => isShortFilm ? moviesSavedCards.filter(i => i.duration <= 40) : moviesSavedCards
 
     return (
         <CurrentUserContext.Provider value={currentUser}>
@@ -243,7 +361,7 @@ function App() {
                     <ProtectedRoute
                         path="/saved-movies"
                         component={SavedMovies}
-                        moviesSavedCards={moviesSavedCards}
+                        moviesSavedCards={smovies()}
                         onDelete={handleMovieDelete}
                         preloader={preloader}
                         onShortCheck={handleShortFilm}
@@ -260,15 +378,24 @@ function App() {
                         component={Profile}
                         onDataChange={handleUserDataChange}
                         onLogout={handleLogout}
+                        onChangeInput={handleChangeInputValue}
+                        isValid={isValid}
+                        errors={errors}
+                        values={values}
                     />
-                    <Route path="/signin" render={() => <Login onLogin={handleLoginSubmit}/>}/>
-                    <Route path="/signup" render={() => <Register onRegister={handleRegisterSubmit}/>}/>
+                    <Route path="/signin"
+                           render={() => <Login onSubmit={handleLoginSubmit} values={values} isValid={isValid}
+                                                errors={errors} onChangeInput={handleChangeInputValue}/>}/>
+                    <Route path="/signup"
+                           render={() => <Register onSubmit={handleRegisterSubmit} values={values} isValid={isValid}
+                                                   errors={errors} onChangeInput={handleChangeInputValue}/>}/>
                     <Route path="*" component={PageNotFound}/>
                 </Switch>
                 <InfoTooltip
                     isOpen={toolTipOpen}
                     status={toolTipStatus}
                     onClose={handlePopupClosing}
+                    message={toolTipMessage}
                 />
                 <Footer/>
             </LoggedInContext.Provider>
