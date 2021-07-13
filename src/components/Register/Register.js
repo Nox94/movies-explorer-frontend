@@ -2,10 +2,11 @@ import '../../common.css';
 import './register.css';
 import Form from "../Form/Form.js";
 
-function Register() {
+function Register(props) {
     return (
         <section className="register section">
-            <Form/>
+            <Form onSubmit={props.onSubmit} values={props.values} isValid={props.isValid}
+                  errors={props.errors} onChangeInput={props.onChangeInput}/>
         </section>
     )
 }

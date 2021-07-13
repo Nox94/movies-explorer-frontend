@@ -1,4 +1,4 @@
-.student{
+.student {
     display: flex;
     flex-direction: column;
     min-width: 320px;
@@ -12,7 +12,7 @@
     margin: 0 0 28px 0;
 }
 
-.student__photo{
+.student__photo {
     border-radius: 10px;
     width: 100%;
     margin: 0 0 40px 0;
@@ -38,7 +38,7 @@
 }
 
 .student__dev-text {
- margin: 0 0 20px 0;
+    margin: 0 0 20px 0;
 }
 
 .student__link-wrapper {
@@ -63,6 +63,7 @@
     .student__photo {
         max-width: 70%;
     }
+
     .student__wrapper-wide-screen {
         display: flex;
         flex-direction: column;
@@ -93,11 +94,13 @@
     .student {
         padding: 90px 50px;
     }
+
     .student__heading {
         font-size: 22px;
         line-height: 27px;
         margin: 0 0 23px 0;
     }
+
     .student__line {
         margin: 0 0 66px 0;
     }
@@ -148,7 +151,7 @@
 
 @media screen and (min-width: 1280px) {
     .student {
-       padding: 110px 70px;
+        padding: 110px 70px;
     }
 
     .student__line {
@@ -185,5 +188,3 @@
     }
 
 }
-
-

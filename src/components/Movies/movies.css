@@ -1,0 +1,32 @@
+.movies__more-button {
+    margin: 50px auto;
+    padding: 0;
+    width: 240px;
+    height: 36px;
+    outline: 1px solid #EDEDED;
+    border: none;
+    background-color: #FFFFFF;
+    border-radius: 6px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    cursor: pointer;
+}
+
+.movies__more-button:hover {
+    background-color: rgba(169, 156, 246, 0.5);
+    color: #FFFFFF;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.movies__more-button:active {
+    background-color: #897cd7;
+}
+
+@media screen and (min-width: 1024px) {
+    .movies__more-button {
+        width: 320px;
+        min-height: 36px;
+    }
+}

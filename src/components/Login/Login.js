@@ -2,10 +2,11 @@ import '../../common.css';
 import './login.css';
 import Form from "../Form/Form.js";
 
-function Login() {
+function Login(props) {
     return (
         <section className="login section">
-            <Form/>
+            <Form onSubmit={props.onSubmit} values={props.values} isValid={props.isValid}
+                  errors={props.errors} onChangeInput={props.onChangeInput}/>
         </section>
     )
 }
