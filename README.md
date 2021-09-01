@@ -19,6 +19,11 @@
 3. Функциональность проекта на React.
 5. Файловая структура проекта по БЭМ Nested.
 
+## Запуск проекта
+
+`npm start` — запускает приложение в браузере   
+
+<!-- 
 ## Роуты для проверки
 
 ### `главная страница`
@@ -32,4 +37,4 @@ https://nox-movies-explorer.nomoredomains.icu/signup
 ### `авторизация`
 https://nox-movies-explorer.nomoredomains.icu/signin
 ### `аккаунт`
-https://nox-movies-explorer.nomoredomains.icu/profile
+https://nox-movies-explorer.nomoredomains.icu/profile -->
